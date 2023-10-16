@@ -12,8 +12,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.material.tabs.TabLayout;
+
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,20 +36,22 @@ public class MainActivity2 extends AppCompatActivity {
         if (id==0) {
             Log.e("error", "Error in id");
         }
-        View background = findViewById(R.id.imageView);
+        View background = findViewById(R.id.BackgroundShiftHistory);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         background.startAnimation(animation);
         TextView text1= findViewById(R.id.textView2);
         TextView text2= findViewById(R.id.textView6);
         TextView text3= findViewById(R.id.textView7);
         TextView text4= findViewById(R.id.textView8);
-        TextView WelcomeText= findViewById(R.id.WelcomeTextMain);
+        TextView WelcomeText= findViewById(R.id.MainTextShiftHistory);
         TextView HoursText = findViewById(R.id.HoursTextMain);
         TextView EarnedText = findViewById(R.id.EarnedTextMain);
         TextView SalaryText = findViewById(R.id.SalaryTextMain);
         TextView NextWorkday = findViewById(R.id.NextWorkdayTextMain);
         Button StartShift = findViewById(R.id.StartShiftButtonMain);
         Button CustomPunchIn = findViewById(R.id.CustomShiftButtonMain);
+        TabLayout tabs=findViewById(R.id.TabLayoutForMainPage);
+        tabs.selectTab(tabs.getTabAt(0));
         text1.startAnimation(animation);
         text2.startAnimation(animation);
         text3.startAnimation(animation);
@@ -136,6 +140,34 @@ public class MainActivity2 extends AppCompatActivity {
                 Intent intent= new Intent(getApplicationContext(), com.example.project.CustomPunchIn.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
+            }
+        });
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        break;
+                    case 1:
+                        Intent intent = new Intent(getApplicationContext(), ShiftHystory.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        tabs.selectTab(tabs.getTabAt(2));
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
