@@ -8,7 +8,7 @@
     tools:context=".CustomPunchIn">
 
     <ImageView
-        android:id="@+id/BackgroundCustomPunchIn"
+        android:id="@+id/BackgroundEditShift"
         android:layout_width="408dp"
         android:layout_height="654dp"
         android:background="@drawable/backfortabs"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/PunchInDateCustomPunchIn"
+        android:id="@+id/PunchInDateEditShift"
         android:layout_width="135dp"
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
@@ -45,41 +45,41 @@
         android:background="@drawable/buttonsbackground"
         android:text="date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/BackgroundCustomPunchIn" />
+        app:layout_constraintTop_toTopOf="@+id/BackgroundEditShift" />
 
     <Button
-        android:id="@+id/PunchInTimeCustomPunchIn"
+        android:id="@+id/PunchInTimeEditShift"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_marginStart="40dp"
         android:background="@drawable/buttonsbackground"
         android:text="time"
-        app:layout_constraintStart_toEndOf="@+id/PunchInDateCustomPunchIn"
-        app:layout_constraintTop_toTopOf="@+id/PunchInDateCustomPunchIn" />
+        app:layout_constraintStart_toEndOf="@+id/PunchInDateEditShift"
+        app:layout_constraintTop_toTopOf="@+id/PunchInDateEditShift" />
 
     <Button
-        android:id="@+id/PunchOutDateCustomPunchIn"
+        android:id="@+id/PunchOutDateEditShift"
         android:layout_width="135dp"
         android:layout_height="50dp"
         android:layout_marginTop="104dp"
         android:layout_marginEnd="244dp"
         android:background="@drawable/buttonsbackground"
         android:text="date"
-        app:layout_constraintEnd_toEndOf="@+id/BackgroundCustomPunchIn"
-        app:layout_constraintTop_toBottomOf="@+id/PunchInDateCustomPunchIn" />
+        app:layout_constraintEnd_toEndOf="@+id/BackgroundEditShift"
+        app:layout_constraintTop_toBottomOf="@+id/PunchInDateEditShift" />
 
     <Button
-        android:id="@+id/PunchOutTimeCustomPunchIn"
+        android:id="@+id/PunchOutTimeEditShift"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_marginTop="103dp"
         android:background="@drawable/buttonsbackground"
         android:text="time"
-        app:layout_constraintStart_toStartOf="@+id/PunchInTimeCustomPunchIn"
-        app:layout_constraintTop_toBottomOf="@+id/PunchInTimeCustomPunchIn" />
+        app:layout_constraintStart_toStartOf="@+id/PunchInTimeEditShift"
+        app:layout_constraintTop_toBottomOf="@+id/PunchInTimeEditShift" />
 
     <Button
-        android:id="@+id/SaveCustomPunchIn"
+        android:id="@+id/SaveEditShift"
         android:layout_width="190dp"
         android:layout_height="58dp"
         android:layout_marginStart="5dp"
@@ -88,18 +88,18 @@
         android:backgroundTint="#A3F38F"
         android:text="Save"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/BackgroundCustomPunchIn" />
+        app:layout_constraintTop_toTopOf="@+id/BackgroundEditShift" />
 
     <Button
-        android:id="@+id/CancelCustomPunchIn"
+        android:id="@+id/CancelEditShift"
         android:layout_width="190dp"
         android:layout_height="57dp"
         android:layout_marginStart="16dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="#F89595"
         android:text="Cancel"
-        app:layout_constraintStart_toEndOf="@+id/SaveCustomPunchIn"
-        app:layout_constraintTop_toTopOf="@+id/SaveCustomPunchIn" />
+        app:layout_constraintStart_toEndOf="@+id/SaveEditShift"
+        app:layout_constraintTop_toTopOf="@+id/SaveEditShift" />
 
     <TextView
         android:id="@+id/textView4"
@@ -111,7 +111,7 @@
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/BackgroundCustomPunchIn" />
+        app:layout_constraintTop_toTopOf="@+id/BackgroundEditShift" />
 
     <TextView
         android:id="@+id/textView5"
@@ -123,5 +123,5 @@
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/BackgroundCustomPunchIn" />
+        app:layout_constraintTop_toTopOf="@+id/BackgroundEditShift" />
 </androidx.constraintlayout.widget.ConstraintLayout>

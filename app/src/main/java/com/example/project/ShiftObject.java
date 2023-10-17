@@ -1,16 +1,39 @@
 package com.example.project;
 
+import java.sql.Timestamp;
+
 public class ShiftObject {
     String StartDate;
     String EndDate;
     int id;
-    int ShiftId;
 
-    public ShiftObject(String startDate, String endDate, int id, int shiftId) {
+    public Timestamp getStartTime() {
+        return StartTime;
+    }
+
+    public void setStartTime(Timestamp startTime) {
+        StartTime = startTime;
+    }
+
+    public Timestamp getEndTime() {
+        return EndTime;
+    }
+
+    public void setEndTime(Timestamp endTime) {
+        EndTime = endTime;
+    }
+
+    int ShiftId;
+    Timestamp StartTime;
+    Timestamp EndTime;
+
+    public ShiftObject(String startDate, String endDate, int id, int shiftId, Timestamp startTime, Timestamp endTime) {
         StartDate = startDate;
         EndDate = endDate;
         this.id = id;
         ShiftId = shiftId;
+        StartTime = startTime;
+        EndTime = endTime;
     }
 
     public String getStartDate() {

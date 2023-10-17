@@ -3,6 +3,7 @@ package com.example.project;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -10,27 +11,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
-
-import net.sourceforge.jtds.jdbc.DateTime;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Calendar;
-import java.util.Date;
 
 public class CustomPunchIn extends AppCompatActivity {
     private LocalDateTime PunchOutTime=LocalDateTime.now();
@@ -156,10 +148,18 @@ public class CustomPunchIn extends AppCompatActivity {
                     });
                     AlertDialog alert=builder.create();
                     alert.show();
+                    connection.close();
 
                 } catch (SQLException e) {
                     Log.e("error while pushing", e.getMessage());
                 }
+            }
+        });
+        Exit.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

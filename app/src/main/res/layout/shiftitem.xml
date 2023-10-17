@@ -39,12 +39,13 @@
                 android:id="@+id/EndTimeShiftHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="2dp"
                 android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/StartTimeShiftHystory"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.437" />
+                app:layout_constraintVertical_bias="0.468" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -55,6 +56,20 @@
                 app:layout_constraintEnd_toStartOf="@+id/EndTimeShiftHistory"
                 app:layout_constraintStart_toEndOf="@+id/StartTimeShiftHystory"
                 app:layout_constraintTop_toTopOf="@+id/StartTimeShiftHystory" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="96dp"
+                android:layout_height="34dp"
+                android:background="@drawable/buttonsbackground"
+                android:backgroundTint="#FFFFFF"
+                android:text="Edit shift"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.866"
+                app:layout_constraintStart_toEndOf="@+id/EndTimeShiftHistory"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.473" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

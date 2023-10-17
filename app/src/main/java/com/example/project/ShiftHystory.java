@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,6 +38,8 @@ public class ShiftHystory extends AppCompatActivity {
         background.startAnimation(animation);
         RecyclerView recyclerView = findViewById(R.id.RecyclerViewShiftHistory);
         recyclerView.startAnimation(animation);
+        TabLayout tabLayout=findViewById(R.id.TabLayoutForShiftHistory);
+        tabLayout.selectTab(tabLayout.getTabAt(1));
         Connection con = new ConnectionHelper().connectionclass();
         try {
             ResultSet result = con.createStatement().executeQuery("SELECT * FROM shifthistory WHERE WorkerId = '" + id+"'");
@@ -45,7 +49,7 @@ public class ShiftHystory extends AppCompatActivity {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd HH:mm");
                 String startString = simpleDateFormat.format(start);
                 String endString = simpleDateFormat.format(end);
-                shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID")));
+                shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID"), start, end));
             }
         } catch (SQLException e) {
             Log.e("error", e.getMessage());
@@ -55,5 +59,33 @@ public class ShiftHystory extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(shiftsAdapter);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
+
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }
