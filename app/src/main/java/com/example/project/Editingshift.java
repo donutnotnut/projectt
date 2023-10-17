@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,8 +12,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -38,7 +41,9 @@ public class Editingshift extends AppCompatActivity {
         Button Cancel = findViewById(R.id.CancelEditShift);
         TextView text1 = findViewById(R.id.textView4);
         TextView text2 = findViewById(R.id.textView5);
+        ImageView BackgroundEditShift = findViewById(R.id.BackgroundEditShift);
         Animation animation = AnimationUtils.loadAnimation(this,R.anim.frombottomtotop);
+        BackgroundEditShift.startAnimation(animation);
         PunchInDate.startAnimation(animation);
         PunchInTime.startAnimation(animation);
         PunchOutDate.startAnimation(animation);
@@ -139,16 +144,21 @@ public class Editingshift extends AppCompatActivity {
                     pstmt.setInt(3, ShiftId);
                     pstmt.executeUpdate();
                     con.close();
+                    Toast.makeText(Editingshift.this, "Shift Updated", Toast.LENGTH_SHORT).show();
                 }
                 catch (Exception e){
                     Log.e("error", e.getMessage());
                 }
+
             }
         });
         Cancel.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ShiftHystory.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
                 finish();
             }
         });

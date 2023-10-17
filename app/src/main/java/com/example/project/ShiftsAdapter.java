@@ -3,6 +3,7 @@ package com.example.project;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
@@ -43,6 +47,24 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
                 intent.putExtra("StartTime", array.get(holder.getAdapterPosition()).getStartTime().getTime());
                 intent.putExtra("EndTime", array.get(holder.getAdapterPosition()).getEndTime().getTime());
                 context.startActivity(intent);
+                Activity activity = (Activity) context;
+                activity.finish();
+            }
+        });
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Connection connection = new ConnectionHelper().connectionclass();
+                try {
+                    PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM shifthistory WHERE ShiftID = ?");
+                    preparedStatement.setInt(1, array.get(holder.getAdapterPosition()).getShiftId());
+                    preparedStatement.executeUpdate();
+                    connection.close();
+                    array.remove(holder.getAdapterPosition());
+                    notifyDataSetChanged();
+                } catch (SQLException e) {
+                    Log.e("error while deleting", e.getMessage());
+                }
             }
         });
     }
@@ -55,11 +77,13 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
         TextView StartTime;
         TextView EndTime;
         Button button;
+        Button delete;
         public ShiftsViewHolder(@NonNull View itemView) {
             super(itemView);
             StartTime = itemView.findViewById(R.id.StartTimeShiftHystory);
             EndTime = itemView.findViewById(R.id.EndTimeShiftHistory);
             button = itemView.findViewById(R.id.button);
+            delete=itemView.findViewById(R.id.button2);
         }
     }
 }
