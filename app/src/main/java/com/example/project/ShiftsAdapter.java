@@ -17,7 +17,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsViewHolder> {
     Context context;
@@ -38,11 +37,12 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
     public void onBindViewHolder(@NonNull ShiftsAdapter.ShiftsViewHolder holder, int position) {
         holder.StartTime.setText(array.get(holder.getAdapterPosition()).getStartDate());
         holder.EndTime.setText(array.get(holder.getAdapterPosition()).getEndDate());
+        holder.WorkerNameTextShiftItem.setText(array.get(holder.getAdapterPosition()).getWorkername());
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, Editingshift.class);
-                intent.putExtra("id", array.get(holder.getAdapterPosition()).getId());
+                intent.putExtra("id", array.get(holder.getAdapterPosition()).getWorkerid());
                 intent.putExtra("ShiftID", array.get(holder.getAdapterPosition()).getShiftId());
                 intent.putExtra("StartTime", array.get(holder.getAdapterPosition()).getStartTime().getTime());
                 intent.putExtra("EndTime", array.get(holder.getAdapterPosition()).getEndTime().getTime());
@@ -76,14 +76,16 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
     public static class ShiftsViewHolder extends RecyclerView.ViewHolder {
         TextView StartTime;
         TextView EndTime;
+        TextView WorkerNameTextShiftItem;
         Button button;
         Button delete;
         public ShiftsViewHolder(@NonNull View itemView) {
             super(itemView);
+            WorkerNameTextShiftItem = itemView.findViewById(R.id.WorkerNameTextShiftItem);
             StartTime = itemView.findViewById(R.id.StartTimeShiftHystory);
             EndTime = itemView.findViewById(R.id.EndTimeShiftHistory);
-            button = itemView.findViewById(R.id.button);
-            delete=itemView.findViewById(R.id.button2);
+            button = itemView.findViewById(R.id.EditWorkerButtonWorkerItem);
+            delete=itemView.findViewById(R.id.DeleteWorkerButtonWorkerItem);
         }
     }
 }

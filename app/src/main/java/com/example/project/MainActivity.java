@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.sql.Connection;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         TextView email = findViewById(R.id.EmailTextMainPage);
         TextView password = findViewById(R.id.PasswordTextMainPage);
         Button btn = findViewById(R.id.LogInButtonMainPage);
+        Switch AdminSwitch = findViewById(R.id.AdminSwitch);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         email.startAnimation(animation);
         password.startAnimation(animation);
@@ -40,10 +42,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (result.getString("Password").equals(password.getText().toString())) {
                         int id=result.getInt("ID");
-                        Intent intent = new Intent(MainActivity.this, MainActivity2.class);
-                        intent.putExtra("id",id);
-                        startActivity(intent);
                         connection.close();
+                        if (!AdminSwitch.isChecked()) {
+                            Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                            intent.putExtra("id",id);
+                            startActivity(intent);
+                        }
+                        else{
+                            Intent intent = new Intent(MainActivity.this, AdminMainPage.class);
+                            intent.putExtra("id",id);
+                            startActivity(intent);
+                        }
+
                     }
                     else {
                         Toast.makeText(MainActivity.this, "Wrong email", Toast.LENGTH_SHORT).show();

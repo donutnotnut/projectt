@@ -3,14 +3,40 @@ package com.example.project;
 import java.sql.Timestamp;
 
 public class ShiftObject {
+
     String StartDate;
     String EndDate;
-    int id;
+    int Workerid;
+    int ShiftId;
+    Timestamp StartTime;
+    Timestamp EndTime;
+
+    String Workername;
+
+
+
+
+    public ShiftObject(String startDate, String endDate, int id, int shiftId, Timestamp startTime, Timestamp endTime, String workername) {
+        StartDate = startDate;
+        EndDate = endDate;
+        this.Workerid = id;
+        ShiftId = shiftId;
+        StartTime = startTime;
+        EndTime = endTime;
+        Workername = workername;
+    }
+
+    public String getWorkername() {
+        return Workername;
+    }
+
+    public void setWorkername(String workername) {
+        Workername = workername;
+    }
 
     public Timestamp getStartTime() {
         return StartTime;
     }
-
     public void setStartTime(Timestamp startTime) {
         StartTime = startTime;
     }
@@ -20,19 +46,6 @@ public class ShiftObject {
     }
 
     public void setEndTime(Timestamp endTime) {
-        EndTime = endTime;
-    }
-
-    int ShiftId;
-    Timestamp StartTime;
-    Timestamp EndTime;
-
-    public ShiftObject(String startDate, String endDate, int id, int shiftId, Timestamp startTime, Timestamp endTime) {
-        StartDate = startDate;
-        EndDate = endDate;
-        this.id = id;
-        ShiftId = shiftId;
-        StartTime = startTime;
         EndTime = endTime;
     }
 
@@ -52,12 +65,12 @@ public class ShiftObject {
         EndDate = endDate;
     }
 
-    public int getId() {
-        return id;
+    public int getWorkerid() {
+        return Workerid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setWorkerid(int workerid) {
+        this.Workerid = workerid;
     }
 
     public int getShiftId() {

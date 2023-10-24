@@ -43,7 +43,7 @@ public class MainActivity2 extends AppCompatActivity {
         TextView text2= findViewById(R.id.textView6);
         TextView text3= findViewById(R.id.textView7);
         TextView text4= findViewById(R.id.textView8);
-        TextView WelcomeText= findViewById(R.id.MainTextShiftHistory);
+        TextView WelcomeText= findViewById(R.id.MainTextShiftHistoryAdmin);
         TextView HoursText = findViewById(R.id.HoursTextMain);
         TextView EarnedText = findViewById(R.id.EarnedTextMain);
         TextView SalaryText = findViewById(R.id.SalaryTextMain);

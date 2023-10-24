@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroud"
+    tools:context=".AdminMainPage">
+
+    <TextView
+        android:id="@+id/MainTextAdminPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/buttonsbackground"
+        android:backgroundTint="#3EFFFFFF"
+        android:padding="10dp"
+        android:text="Admin mode enabled"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.119" />
+
+    <Button
+        android:id="@+id/EditWorkersButtonAdminPage"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:background="@drawable/buttonsbackground"
+        android:text="Edit Workers"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MainTextAdminPage"
+        app:layout_constraintVertical_bias="0.147" />
+
+    <Button
+        android:id="@+id/EditShiftsButtonAdminPAge"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:background="@drawable/buttonsbackground"
+        android:text="Edit Shifts"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EditWorkersButtonAdminPage"
+        app:layout_constraintVertical_bias="0.111" />
+
+    <Button
+        android:id="@+id/NextWeekScheduleAdminPage"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:background="@drawable/buttonsbackground"
+        android:text="Next week schedule"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EditShiftsButtonAdminPAge"
+        app:layout_constraintVertical_bias="0.138" />
+</androidx.constraintlayout.widget.ConstraintLayout>

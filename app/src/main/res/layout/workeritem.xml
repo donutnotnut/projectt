@@ -25,47 +25,13 @@
             android:backgroundTint="#B4CACACA"
             android:padding="10dp">
 
-            <TextView
-                android:id="@+id/StartTimeShiftHystory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
-                android:text="TextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-"
-                app:layout_constraintBottom_toBottomOf="@+id/StartTimeShiftHystory"
-                app:layout_constraintEnd_toStartOf="@+id/EndTimeShiftHistory"
-                app:layout_constraintHorizontal_bias="0.6"
-                app:layout_constraintStart_toEndOf="@+id/StartTimeShiftHystory"
-                app:layout_constraintTop_toTopOf="@+id/StartTimeShiftHystory"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/EndTimeShiftHistory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="2dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/StartTimeShiftHystory"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.437" />
-
             <Button
                 android:id="@+id/EditWorkerButtonWorkerItem"
                 android:layout_width="73dp"
                 android:layout_height="35dp"
                 android:background="@drawable/buttonsbackground"
                 android:backgroundTint="#BDF8A4"
-                android:text="Edit shift"
+                android:text="Edit worker"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -88,12 +54,13 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/WorkerNameTextShiftItem"
+                android:id="@+id/WorkerNameTextWorkersItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.065"
+                android:layout_marginStart="20dp"
+                android:text="Name holder"
+                android:textColor="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

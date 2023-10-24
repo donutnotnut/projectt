@@ -30,9 +30,6 @@ public class ShiftHystory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift_hystory);
         id = getIntent().getIntExtra("id", 0);
-        if (id == 0) {
-            Log.e("error while getting id", "no id was given");
-        }
         View background = findViewById(R.id.BackgroundShiftHistory);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         background.startAnimation(animation);
@@ -49,7 +46,7 @@ public class ShiftHystory extends AppCompatActivity {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd HH:mm");
                 String startString = simpleDateFormat.format(start);
                 String endString = simpleDateFormat.format(end);
-                shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID"), start, end));
+                shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID"), start, end, ""));
             }
         } catch (SQLException e) {
             Log.e("error", e.getMessage());
