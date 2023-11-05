@@ -92,12 +92,15 @@ public class MainActivity2 extends AppCompatActivity {
                 long timeDifference = end.getTime() - start.getTime();
                 hours += (double) timeDifference / (1000 * 60 * 60);
             }
-            DecimalFormat decimalFormat = new DecimalFormat("#.00");
+            con.close();
+            DecimalFormat decimalFormat = new DecimalFormat("#.0");
             String formattedValue = decimalFormat.format(hours);
             hours=Double.parseDouble(formattedValue);
-            con.close();
             HoursText.setText(hours+" hours");
-            EarnedText.setText(hours*Salary+"₪");
+            double earned=hours*Salary;
+            formattedValue = decimalFormat.format(earned);
+            earned=Double.parseDouble(formattedValue);
+            EarnedText.setText(earned+"₪");
         }catch (SQLException e){
             Log.e("error while counting hours", e.getMessage());
         }
@@ -155,7 +158,9 @@ public class MainActivity2 extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case 2:
-                        tabs.selectTab(tabs.getTabAt(2));
+                        Intent intent2 = new Intent(getApplicationContext(), SelectNextWeekShifts.class);
+                        intent2.putExtra("id", id);
+                        startActivity(intent2);
                         break;
                 }
             }

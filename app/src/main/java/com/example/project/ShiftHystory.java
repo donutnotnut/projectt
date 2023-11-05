@@ -70,6 +70,9 @@ public class ShiftHystory extends AppCompatActivity {
                     case 1:
                         break;
                     case 2:
+                        Intent intent2 = new Intent(getApplicationContext(), SelectNextWeekShifts.class);
+                        intent2.putExtra("id", id);
+                        startActivity(intent2);
 
                 }
             }
