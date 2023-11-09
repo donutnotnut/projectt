@@ -13,7 +13,7 @@
         android:layout_width="414dp"
         android:layout_height="672dp"
         android:background="@drawable/backfortabs"
-        android:backgroundTint="#9CFFFFFF"
+        android:backgroundTint="@color/accent_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -39,7 +39,7 @@
         android:layout_height="81dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/buttonsbackground"
-        android:backgroundTint="#9AFD8F"
+        android:backgroundTint="@color/accent"
         android:text="Start Shift"
         android:textAllCaps="false"
         android:textSize="25sp"
@@ -55,6 +55,7 @@
         android:layout_width="159dp"
         android:layout_height="147dp"
         android:background="@drawable/buttonsbackground"
+        android:backgroundTint="@color/accent_light"
         android:gravity="center"
         android:text="Earned"
         android:textAlignment="center"
@@ -72,6 +73,7 @@
         android:layout_width="159dp"
         android:layout_height="147dp"
         android:background="@drawable/buttonsbackground"
+        android:backgroundTint="@color/accent_light"
         android:gravity="center"
         android:text="Hours"
         android:textAlignment="center"
@@ -89,6 +91,7 @@
         android:layout_width="159dp"
         android:layout_height="147dp"
         android:background="@drawable/buttonsbackground"
+        android:backgroundTint="@color/accent_light"
         android:gravity="center"
         android:text="NextWorkday"
         android:textAlignment="center"
@@ -106,7 +109,7 @@
         android:layout_width="96dp"
         android:layout_height="81dp"
         android:background="@drawable/buttonsbackground"
-        android:backgroundTint="#97FFFFFF"
+        android:backgroundTint="@color/accent_light"
         android:text="Custom time"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,6 +121,7 @@
         android:layout_width="159dp"
         android:layout_height="147dp"
         android:background="@drawable/buttonsbackground"
+        android:backgroundTint="@color/accent_light"
         android:gravity="center"
         android:text="Salary"
         android:textAlignment="center"
@@ -130,41 +134,6 @@
         app:layout_constraintTop_toTopOf="@+id/BackgroundShiftHistory"
         app:layout_constraintVertical_bias="0.486" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/TabLayoutForMainPage"
-        android:layout_width="409dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StartShiftButtonMain"
-        app:tabBackground="@drawable/backfortabs">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Main"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="675dp" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shift history"
-            tools:ignore="TouchTargetSizeCheck"
-            tools:layout_editor_absoluteX="138dp"
-            tools:layout_editor_absoluteY="689dp" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Week schedule"
-            tools:ignore="TouchTargetSizeCheck"
-            tools:layout_editor_absoluteX="274dp"
-            tools:layout_editor_absoluteY="660dp" />
-    </com.google.android.material.tabs.TabLayout>
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -172,6 +141,7 @@
         android:layout_marginStart="44dp"
         android:layout_marginTop="8dp"
         android:text="Hours done:"
+        android:textColor="#323232"
         app:layout_constraintStart_toStartOf="@+id/HoursTextMain"
         app:layout_constraintTop_toTopOf="@+id/HoursTextMain" />
 
@@ -182,6 +152,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:text="Earned this month:"
+        android:textColor="#323232"
         app:layout_constraintStart_toStartOf="@+id/EarnedTextMain"
         app:layout_constraintTop_toTopOf="@+id/EarnedTextMain" />
 
@@ -192,6 +163,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="12dp"
         android:text="Salary:"
+        android:textColor="#323232"
         app:layout_constraintStart_toStartOf="@+id/BackgroundShiftHistory"
         app:layout_constraintTop_toTopOf="@+id/SalaryTextMain" />
 
@@ -202,7 +174,24 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
         android:text="Next workday:"
+        android:textColor="#323232"
         app:layout_constraintStart_toStartOf="@+id/NextWorkdayTextMain"
         app:layout_constraintTop_toTopOf="@+id/NextWorkdayTextMain" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/tablayout"
+        android:layout_width="377dp"
+        android:layout_height="66dp"
+        android:background="@drawable/buttonsbackground"
+        app:backgroundTint="@color/background_accent"
+        app:itemIconTint="@color/accent_dark"
+        app:itemTextColor="@color/accent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/BackgroundShiftHistory"
+        app:layout_constraintVertical_bias="0.973"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,7 @@
 package com.example.project;
 
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,13 +9,15 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,8 +54,16 @@ public class MainActivity2 extends AppCompatActivity {
         TextView NextWorkday = findViewById(R.id.NextWorkdayTextMain);
         Button StartShift = findViewById(R.id.StartShiftButtonMain);
         Button CustomPunchIn = findViewById(R.id.CustomShiftButtonMain);
-        TabLayout tabs=findViewById(R.id.TabLayoutForMainPage);
-        tabs.selectTab(tabs.getTabAt(0));
+        BottomNavigationView tabs=findViewById(R.id.tablayout);
+        tabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(true);
+                return true;
+            }
+        });
+        tabs.setSelectedItemId(0);
         text1.startAnimation(animation);
         text2.startAnimation(animation);
         text3.startAnimation(animation);
@@ -145,34 +157,20 @@ public class MainActivity2 extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
+        tabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        break;
-                    case 1:
-                        Intent intent = new Intent(getApplicationContext(), ShiftHystory.class);
-                        intent.putExtra("id", id);
-                        startActivity(intent);
-                        break;
-                    case 2:
-                        Intent intent2 = new Intent(getApplicationContext(), SelectNextWeekShifts.class);
-                        intent2.putExtra("id", id);
-                        startActivity(intent2);
-                        break;
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId()==R.id.HistoryItem){
+                    Intent intent = new Intent(getApplicationContext(), ShiftHystory.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
                 }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
+                if (item.getItemId()==R.id.NextWeekShiftTem) {
+                    Intent intent = new Intent(getApplicationContext(), SelectNextWeekShifts.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                }
+                return false;
             }
         });
 

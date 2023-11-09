@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -30,6 +31,7 @@ public class ShiftHystory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift_hystory);
         id = getIntent().getIntExtra("id", 0);
+
         View background = findViewById(R.id.BackgroundShiftHistory);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         background.startAnimation(animation);

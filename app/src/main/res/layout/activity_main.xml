@@ -43,7 +43,7 @@
         android:layout_height="55dp"
         android:layout_marginTop="108dp"
         android:background="@drawable/buttonsbackground"
-        android:backgroundTint="#65FFFFFF"
+        android:backgroundTint="@color/accent_dark"
         android:ems="10"
         android:hint="Enter email"
         android:inputType="textEmailAddress"
@@ -59,7 +59,7 @@
         android:layout_width="284dp"
         android:layout_height="55dp"
         android:background="@drawable/buttonsbackground"
-        android:backgroundTint="#656565"
+        android:backgroundTint="@color/accent_dark"
         android:ems="10"
         android:hint="Enter Password"
         android:inputType="textPassword"
@@ -77,7 +77,7 @@
         android:layout_width="135dp"
         android:layout_height="51dp"
         android:background="@drawable/buttonsbackground"
-        android:backgroundTint="#FFFFFF"
+        android:backgroundTint="@color/accent"
         android:text="Log in"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,5 +98,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.035" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

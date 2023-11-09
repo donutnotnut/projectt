@@ -1,31 +1,5 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Black background -->
-    <item android:drawable="@android:color/black" />
-
-    <!-- Radial Gradient - Top Left Corner -->
-    <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:type="radial"
-                android:centerX="0.1"
-                android:centerY="0.1"
-                android:startColor="#9CFF6161"
-                android:endColor="#00000000"
-                android:gradientRadius="70%"/>
-        </shape>
-    </item>
-
-    <!-- Radial Gradient - Top Right Corner -->
-    <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:type="radial"
-                android:centerX="0.9"
-                android:centerY="0.9"
-                android:startColor="#7A7676FA"
-                android:endColor="#00000000"
-                android:gradientRadius="70%"/>
-        </shape>
-    </item>
-
-</layer-list>
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/background_accent" />
+</shape>
