@@ -25,12 +25,10 @@ public class AdminEditWorkersPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_edit_workers_page);
         RecyclerView recyclerView = findViewById(R.id.WorkersRecyclerList);
-        ImageView background = findViewById(R.id.imageView);
         Button NewWorkerButton = findViewById(R.id.NewWorkerEditWorkers);
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         NewWorkerButton.startAnimation(animation);
-        background.startAnimation(animation);
         recyclerView.startAnimation(animation);
 
         //setup adapter and recycler

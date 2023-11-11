@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="73dp"
             android:background="@drawable/buttonsbackground"
-            android:backgroundTint="#B4CACACA"
+            android:backgroundTint="@color/accent_dark"
             android:padding="10dp">
 
             <Button
@@ -30,7 +30,7 @@
                 android:layout_width="73dp"
                 android:layout_height="35dp"
                 android:background="@drawable/buttonsbackground"
-                android:backgroundTint="#BDF8A4"
+                android:backgroundTint="@color/accent"
                 android:text="Edit worker"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +45,7 @@
                 android:layout_height="35dp"
                 android:layout_marginStart="12dp"
                 android:background="@drawable/buttonsbackground"
-                android:backgroundTint="#F89898"
+                android:backgroundTint="#E18A8A"
                 android:text="Delete"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="@+id/EditWorkerButtonWorkerItem"
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:text="Name holder"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

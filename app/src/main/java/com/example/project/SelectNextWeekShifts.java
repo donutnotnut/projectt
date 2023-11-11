@@ -1,5 +1,6 @@
 package com.example.project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,6 +16,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,8 +45,10 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         TextView Warning = findViewById(R.id.ShitsWarningSelectNextWeek);
         Button save= findViewById(R.id.button);
         Button check= findViewById(R.id.button2);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.tabslayout);
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
+        Warning.startAnimation(animation);
         background.startAnimation(animation);
         Monday.startAnimation(animation);
         Tuesday.startAnimation(animation);
@@ -61,6 +68,16 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         array.add(Friday);
         array.add(Saturday);
         array.add(Sunday);
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(true);
+                return true;
+            }
+        });
+        bottomNavigationView.setSelectedItemId(R.id.NextWeekShiftTem);
         if (id==0) {
             Log.e("error", "Error in id");
         }
@@ -119,11 +136,35 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                     }
                 });
             }
+            connection.close();
 
         }
         catch (Exception e) {
             Log.e("error", e.getMessage());
         }
+        check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //finish this
+            }
+        });
+        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId()==R.id.HistoryItem){
+                    Intent intent = new Intent(getApplicationContext(), ShiftHystory.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                }
+                if (item.getItemId()==R.id.HomeItem) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                }
+                return false;
+            }
+        });
+
     }
     private void SetterCheckBox(ArrayList<CheckBox> array){
         for(int i=0;i<array.size();i++){

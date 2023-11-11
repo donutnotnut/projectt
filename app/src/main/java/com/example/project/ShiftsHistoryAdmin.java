@@ -23,9 +23,7 @@ public class ShiftsHistoryAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shift_hystory_admin);
         RecyclerView recyclerView = findViewById(R.id.RecyclerViewShiftHistoryAdmin);
-        ImageView imageView = findViewById(R.id.BackgroundShiftHistoryAdmin);
         Animation animation = AnimationUtils.loadAnimation(this,R.anim.frombottomtotop);
-        imageView.startAnimation(animation);
         recyclerView.startAnimation(animation);
         Connection connection = new ConnectionHelper().connectionclass();
         try {

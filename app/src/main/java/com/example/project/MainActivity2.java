@@ -1,6 +1,5 @@
 package com.example.project;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,9 +39,7 @@ public class MainActivity2 extends AppCompatActivity {
         if (id==0) {
             Log.e("error", "Error in id");
         }
-        View background = findViewById(R.id.BackgroundShiftHistory);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
-        background.startAnimation(animation);
         TextView text1= findViewById(R.id.textView2);
         TextView text2= findViewById(R.id.textView6);
         TextView text3= findViewById(R.id.textView7);
@@ -54,7 +51,7 @@ public class MainActivity2 extends AppCompatActivity {
         TextView NextWorkday = findViewById(R.id.NextWorkdayTextMain);
         Button StartShift = findViewById(R.id.StartShiftButtonMain);
         Button CustomPunchIn = findViewById(R.id.CustomShiftButtonMain);
-        BottomNavigationView tabs=findViewById(R.id.tablayout);
+        BottomNavigationView tabs=findViewById(R.id.tabslayout);
         tabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 
             @Override

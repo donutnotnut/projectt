@@ -41,12 +41,10 @@ public class CustomPunchIn extends AppCompatActivity {
         Button PunchOutTimeButton=findViewById(R.id.PunchOutTimeCustomPunchIn);
         Button Exit = findViewById(R.id.CancelCustomPunchIn);
         Button Save= findViewById(R.id.SaveCustomPunchIn);
-        View background = findViewById(R.id.BackgroundCustomPunchIn);
         TextView text1= findViewById(R.id.textView4);
         TextView text2=findViewById(R.id.textView5);
         text1.startAnimation(AnimationUtils.loadAnimation(this, R.anim.frombottomtotop));
         text2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.frombottomtotop));
-        background.startAnimation(AnimationUtils.loadAnimation(this, R.anim.frombottomtotop));
         PunchInTimeButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.frombottomtotop));
         PunchInDateButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.frombottomtotop));
         PunchOutDateButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.frombottomtotop));

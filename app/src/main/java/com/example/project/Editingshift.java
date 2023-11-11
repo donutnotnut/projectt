@@ -41,9 +41,7 @@ public class Editingshift extends AppCompatActivity {
         Button Cancel = findViewById(R.id.CancelEditShift);
         TextView text1 = findViewById(R.id.textView4);
         TextView text2 = findViewById(R.id.textView5);
-        ImageView BackgroundEditShift = findViewById(R.id.BackgroundEditShift);
         Animation animation = AnimationUtils.loadAnimation(this,R.anim.frombottomtotop);
-        BackgroundEditShift.startAnimation(animation);
         PunchInDate.startAnimation(animation);
         PunchInTime.startAnimation(animation);
         PunchOutDate.startAnimation(animation);
@@ -66,9 +64,9 @@ public class Editingshift extends AppCompatActivity {
         StartLocalDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
         instant = Instant.ofEpochMilli(EndTime);
         EndLocalDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
-        PunchInDate.setText(StartLocalDate.getMonth()+"/"+StartLocalDate.getDayOfMonth());
+        PunchInDate.setText(StartLocalDate.getMonthValue()+"/"+StartLocalDate.getDayOfMonth());
         PunchInTime.setText(StartLocalDate.getHour()+":"+StartLocalDate.getMinute());
-        PunchOutDate.setText(EndLocalDate.getMonth()+"/"+EndLocalDate.getDayOfMonth());
+        PunchOutDate.setText(EndLocalDate.getMonthValue()+"/"+EndLocalDate.getDayOfMonth());
         PunchOutTime.setText(EndLocalDate.getHour()+":"+EndLocalDate.getMinute());
         DatePickerDialog DatePunchInPicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 

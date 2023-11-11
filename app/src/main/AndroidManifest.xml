@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".CurrentWeekSchedule"
+            android:exported="false" />
+        <activity
             android:name=".SelectNextWeekShifts"
             android:exported="false" />
         <activity
