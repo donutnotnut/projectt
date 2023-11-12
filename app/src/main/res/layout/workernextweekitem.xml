@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.005">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:backgroundTint="#00000000">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="408dp"
+                android:layout_height="193dp"
+                android:background="@drawable/buttonsbackground"
+                android:backgroundTint="@color/accent_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/NameHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.045"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.115" />
+
+            <CheckBox
+                android:id="@+id/Sundaycheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/accent"
+                android:text="Sunday"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.048"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageView"
+                app:layout_constraintVertical_bias="0.341" />
+
+            <CheckBox
+                android:id="@+id/Mondaycheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/accent"
+                android:text="Monday"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.048"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Sundaycheckbox"
+                app:layout_constraintVertical_bias="0.135" />
+
+            <CheckBox
+                android:id="@+id/Wednesdaycheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:buttonTint="@color/accent"
+                android:text="Wednesday"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="@+id/Sundaycheckbox"
+                app:layout_constraintStart_toEndOf="@+id/Sundaycheckbox"
+                app:layout_constraintTop_toTopOf="@+id/Sundaycheckbox"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <CheckBox
+                android:id="@+id/Thursdaycheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:buttonTint="@color/accent"
+                android:text="Thursday"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="@+id/Mondaycheckbox"
+                app:layout_constraintStart_toEndOf="@+id/Mondaycheckbox"
+                app:layout_constraintTop_toTopOf="@+id/Mondaycheckbox"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <CheckBox
+                android:id="@+id/Fridaycheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:buttonTint="@color/accent"
+                android:text="Friday"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="@+id/Wednesdaycheckbox"
+                app:layout_constraintStart_toEndOf="@+id/Wednesdaycheckbox"
+                app:layout_constraintTop_toTopOf="@+id/Wednesdaycheckbox"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <CheckBox
+                android:id="@+id/Saturdaycheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="31dp"
+                android:buttonTint="@color/accent"
+                android:text="Saturday"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="@+id/Thursdaycheckbox"
+                app:layout_constraintStart_toEndOf="@+id/Thursdaycheckbox"
+                app:layout_constraintTop_toTopOf="@+id/Thursdaycheckbox"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <CheckBox
+                android:id="@+id/Tuesdaycheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:buttonTint="@color/accent"
+                android:text="Tuesday"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="@+id/Mondaycheckbox"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/Mondaycheckbox"
+                app:layout_constraintTop_toBottomOf="@+id/Mondaycheckbox" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

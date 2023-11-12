@@ -36,5 +36,12 @@ public class AdminMainPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        NextWeekScheduleButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent intent = new Intent(AdminMainPage.this, NextWeekAdmin.class);
+               startActivity(intent);
+           }
+        });
     }
 }

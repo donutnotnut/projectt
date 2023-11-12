@@ -3,6 +3,8 @@ package com.example.project;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,7 +46,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         CheckBox Sunday = findViewById(R.id.SundayChekBoxSelectNextWeek);
         TextView Warning = findViewById(R.id.ShitsWarningSelectNextWeek);
         Button save= findViewById(R.id.button);
-        Button check= findViewById(R.id.button2);
+        RecyclerView recyclerView = findViewById(R.id.CurrentWeekrRecycler);
         BottomNavigationView bottomNavigationView = findViewById(R.id.tabslayout);
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
@@ -58,7 +60,6 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         Saturday.startAnimation(animation);
         Sunday.startAnimation(animation);
         save.startAnimation(animation);
-        check.startAnimation(animation);
         Connection connection = new ConnectionHelper().connectionclass();
         ArrayList<CheckBox> array = new ArrayList<>();
         array.add(Monday);
@@ -142,13 +143,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         catch (Exception e) {
             Log.e("error", e.getMessage());
         }
-        check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //finish this
-            }
-        });
-        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId()==R.id.HistoryItem){
@@ -164,6 +159,90 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                 return false;
             }
         });
+        Connection con = new ConnectionHelper().connectionclass();
+        ArrayList<workdayitem> arrayforadapter= new ArrayList<>();
+        try {
+            ResultSet rs = con.createStatement().executeQuery("select * from currentweek where WorkerID='"+id+"'");
+            rs.next();
+            if (rs.getBoolean("sunday")) {
+                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Sunday=1");
+                ArrayList<String> names = new ArrayList<>();
+                while (working.next()){
+                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
+                    nameworker.next();
+                    names.add(nameworker.getString("Name"));
+                }
+                arrayforadapter.add(new workdayitem("Sunday", (ArrayList<String>)names.clone()));
+            }
+            if (rs.getBoolean("monday")) {
+                ResultSet working = con.createStatement().executeQuery("select * from currentweek where monday=1");
+                ArrayList<String> names = new ArrayList<>();
+                while (working.next()){
+                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
+                    nameworker.next();
+                    names.add(nameworker.getString("Name"));
+                }
+                arrayforadapter.add(new workdayitem("Monday", (ArrayList<String>)names.clone()));
+            }
+            if (rs.getBoolean("Tuesday")) {
+                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Tuesday=1");
+                ArrayList<String> names = new ArrayList<>();
+                while (working.next()){
+                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
+                    nameworker.next();
+                    names.add(nameworker.getString("Name"));
+                }
+                arrayforadapter.add(new workdayitem("Tuesday", (ArrayList<String>)names.clone()));
+            }
+            if (rs.getBoolean("Wednesday")) {
+                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Wednesday=1");
+                ArrayList<String> names = new ArrayList<>();
+                while (working.next()){
+                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
+                    nameworker.next();
+                    names.add(nameworker.getString("Name"));
+                }
+                arrayforadapter.add(new workdayitem("Wednesday", (ArrayList<String>)names.clone()));
+            }
+            if (rs.getBoolean("Thursday")) {
+                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Thursday=1");
+                ArrayList<String> names = new ArrayList<>();
+                while (working.next()){
+                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
+                    nameworker.next();
+                    names.add(nameworker.getString("Name"));
+                }
+                arrayforadapter.add(new workdayitem("Thursday", (ArrayList<String>)names.clone()));
+            }
+            if (rs.getBoolean("Friday")) {
+                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Friday=1");
+                ArrayList<String> names = new ArrayList<>();
+                while (working.next()){
+                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
+                    nameworker.next();
+                    names.add(nameworker.getString("Name"));
+                }
+                arrayforadapter.add(new workdayitem("Friday", (ArrayList<String>)names.clone()));
+            }
+            if (rs.getBoolean("Saturday")) {
+                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Saturday=1");
+                ArrayList<String> names = new ArrayList<>();
+                while (working.next()){
+                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
+                    nameworker.next();
+                    names.add(nameworker.getString("Name"));
+                }
+                arrayforadapter.add(new workdayitem("Saturday", (ArrayList<String>)names.clone()));
+            }
+        }
+        catch (Exception e){
+            Log.e("error", e.getMessage());
+        }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(layoutManager);
+        AdapterCurrentWeek adapter = new AdapterCurrentWeek(arrayforadapter,this);
+        recyclerView.setAdapter(adapter);
 
     }
     private void SetterCheckBox(ArrayList<CheckBox> array){

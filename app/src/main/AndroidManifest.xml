@@ -16,6 +16,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NextWeekAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".currentweekactivity"
+            android:exported="false" />
+        <activity
             android:name=".CurrentWeekSchedule"
             android:exported="false" />
         <activity
