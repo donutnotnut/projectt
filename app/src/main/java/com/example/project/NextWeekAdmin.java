@@ -72,7 +72,8 @@ public class NextWeekAdmin extends AppCompatActivity {
                             "    Wednesday = NULL, " +
                             "    Thursday = NULL, " +
                             "    Friday = NULL, " +
-                            "    Saturday = NULL";
+                            "    Saturday = NULL, " +
+                            "    Locked = 0";
                     PreparedStatement preparedStatement2 = connection1.prepareStatement(updateQuery2);
                     preparedStatement2.executeUpdate();
                     Toast.makeText(NextWeekAdmin.this, "Changes saved and pushed to workers", Toast.LENGTH_LONG).show();

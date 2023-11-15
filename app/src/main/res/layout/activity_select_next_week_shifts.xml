@@ -45,10 +45,10 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintHorizontal_bias="0.119"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.321" />
+        app:layout_constraintVertical_bias="0.349" />
 
     <CheckBox
         android:id="@+id/SundayChekBoxSelectNextWeek"
@@ -57,31 +57,32 @@
         android:layout_marginTop="52dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
+        android:buttonTint="@color/accent_light"
         android:padding="10dp"
         android:text="Sunday"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintHorizontal_bias="0.057"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.272" />
+        app:layout_constraintVertical_bias="0.354" />
 
     <CheckBox
         android:id="@+id/MondayCheckBoxSelectNextWeek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
+        android:buttonTint="@color/accent_light"
         android:padding="10dp"
         android:text="Monday"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintHorizontal_bias="0.453"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SundayChekBoxSelectNextWeek"
+        app:layout_constraintTop_toTopOf="@+id/SundayChekBoxSelectNextWeek"
         app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
@@ -91,12 +92,13 @@
         android:layout_marginTop="6dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
+        android:buttonTint="@color/accent_light"
         android:padding="10dp"
         android:text="Tuesday"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintHorizontal_bias="0.058"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MondayCheckBoxSelectNextWeek"
         app:layout_constraintVertical_bias="0.0" />
@@ -107,15 +109,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
+        android:buttonTint="@color/accent_light"
         android:padding="10dp"
         android:text="Wednesday"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.059"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TuesdayCheckBoxSelectNextWeek"
-        app:layout_constraintVertical_bias="0.031" />
+        app:layout_constraintTop_toTopOf="@+id/TuesdayCheckBoxSelectNextWeek"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/ThursdayCheckBoxSelectNextWeek"
@@ -123,15 +126,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
+        android:buttonTint="@color/accent_light"
         android:padding="10dp"
         android:text="Thursday"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintHorizontal_bias="0.059"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/WednesdayCheckBoxSelectNextWeek"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.028" />
 
     <CheckBox
         android:id="@+id/FridayCheckBoxSelectNextWeek"
@@ -139,15 +143,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
+        android:buttonTint="@color/accent_light"
         android:padding="10dp"
         android:text="Friday"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintHorizontal_bias="0.436"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ThursdayCheckBoxSelectNextWeek"
-        app:layout_constraintVertical_bias="0.035" />
+        app:layout_constraintTop_toTopOf="@+id/ThursdayCheckBoxSelectNextWeek"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/SaturdayCheckBoxSelectNextWeek"
@@ -155,15 +160,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
+        android:buttonTint="@color/accent_light"
         android:padding="10dp"
         android:text="Saturday"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintHorizontal_bias="0.059"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FridayCheckBoxSelectNextWeek"
-        app:layout_constraintVertical_bias="0.041" />
+        app:layout_constraintVertical_bias="0.034" />
 
     <Button
         android:id="@+id/button"
@@ -191,7 +197,7 @@
         app:layout_constraintHorizontal_bias="0.53"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.334" />
+        app:layout_constraintVertical_bias="0.344" />
 
     <TextView
         android:id="@+id/textView18"

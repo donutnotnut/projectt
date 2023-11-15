@@ -137,7 +137,6 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                     }
                 });
             }
-            connection.close();
 
         }
         catch (Exception e) {
@@ -160,83 +159,30 @@ public class SelectNextWeekShifts extends AppCompatActivity {
             }
         });
         Connection con = new ConnectionHelper().connectionclass();
-        ArrayList<workdayitem> arrayforadapter= new ArrayList<>();
+        ArrayList<workdayitem> arrayforadapter = new ArrayList<>();
+
         try {
-            ResultSet rs = con.createStatement().executeQuery("select * from currentweek where WorkerID='"+id+"'");
+            ResultSet rs = con.createStatement().executeQuery("select * from currentweek where WorkerID='" + id + "'");
             rs.next();
-            if (rs.getBoolean("sunday")) {
-                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Sunday=1");
-                ArrayList<String> names = new ArrayList<>();
-                while (working.next()){
-                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
-                    nameworker.next();
-                    names.add(nameworker.getString("Name"));
+
+            String[] daysOfWeek = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+            for (String day : daysOfWeek) {
+                if (rs.getBoolean(day.toLowerCase())) {
+                    ResultSet working = con.createStatement().executeQuery("select * from currentweek where " + day + "=1");
+                    ArrayList<String> names = new ArrayList<>();
+
+                    while (working.next()) {
+                        ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='" + working.getInt("WorkerID") + "'");
+                        nameworker.next();
+                        names.add(nameworker.getString("Name"));
+                    }
+
+                    arrayforadapter.add(new workdayitem(day, (ArrayList<String>) names.clone()));
                 }
-                arrayforadapter.add(new workdayitem("Sunday", (ArrayList<String>)names.clone()));
             }
-            if (rs.getBoolean("monday")) {
-                ResultSet working = con.createStatement().executeQuery("select * from currentweek where monday=1");
-                ArrayList<String> names = new ArrayList<>();
-                while (working.next()){
-                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
-                    nameworker.next();
-                    names.add(nameworker.getString("Name"));
-                }
-                arrayforadapter.add(new workdayitem("Monday", (ArrayList<String>)names.clone()));
-            }
-            if (rs.getBoolean("Tuesday")) {
-                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Tuesday=1");
-                ArrayList<String> names = new ArrayList<>();
-                while (working.next()){
-                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
-                    nameworker.next();
-                    names.add(nameworker.getString("Name"));
-                }
-                arrayforadapter.add(new workdayitem("Tuesday", (ArrayList<String>)names.clone()));
-            }
-            if (rs.getBoolean("Wednesday")) {
-                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Wednesday=1");
-                ArrayList<String> names = new ArrayList<>();
-                while (working.next()){
-                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
-                    nameworker.next();
-                    names.add(nameworker.getString("Name"));
-                }
-                arrayforadapter.add(new workdayitem("Wednesday", (ArrayList<String>)names.clone()));
-            }
-            if (rs.getBoolean("Thursday")) {
-                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Thursday=1");
-                ArrayList<String> names = new ArrayList<>();
-                while (working.next()){
-                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
-                    nameworker.next();
-                    names.add(nameworker.getString("Name"));
-                }
-                arrayforadapter.add(new workdayitem("Thursday", (ArrayList<String>)names.clone()));
-            }
-            if (rs.getBoolean("Friday")) {
-                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Friday=1");
-                ArrayList<String> names = new ArrayList<>();
-                while (working.next()){
-                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
-                    nameworker.next();
-                    names.add(nameworker.getString("Name"));
-                }
-                arrayforadapter.add(new workdayitem("Friday", (ArrayList<String>)names.clone()));
-            }
-            if (rs.getBoolean("Saturday")) {
-                ResultSet working = con.createStatement().executeQuery("select * from currentweek where Saturday=1");
-                ArrayList<String> names = new ArrayList<>();
-                while (working.next()){
-                    ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='"+working.getInt("WorkerID")+"'");
-                    nameworker.next();
-                    names.add(nameworker.getString("Name"));
-                }
-                arrayforadapter.add(new workdayitem("Saturday", (ArrayList<String>)names.clone()));
-            }
-        }
-        catch (Exception e){
-            Log.e("error", e.getMessage());
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception according to your needs
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);

@@ -30,7 +30,11 @@ public class AdapterCurrentWeek extends RecyclerView.Adapter<AdapterCurrentWeek.
     public void onBindViewHolder(@NonNull AdapterCurrentWeek.ViewHolder holder, int position) {
         holder.DayName.setText(array.get(position).getDay());
         for (int i =0; i<array.get(position).getNames().size();i++){
-            holder.Works.setText(holder.Works.getText()+", "+holder.Works.getText()+array.get(position).getNames().get(i));
+            if (i== array.size()-2) {
+                holder.Works.append(array.get(position).getNames().get(i));
+            }
+            else
+                holder.Works.append(array.get(position).getNames().get(i)+" , ");
         }
     }
 

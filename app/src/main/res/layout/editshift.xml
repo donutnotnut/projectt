@@ -26,12 +26,13 @@
         android:layout_width="135dp"
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
+        android:layout_marginTop="164dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
         android:text="date"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="162dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/PunchInTimeEditShift"
@@ -49,13 +50,14 @@
         android:id="@+id/PunchOutDateEditShift"
         android:layout_width="135dp"
         android:layout_height="50dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent_dark"
         android:text="date"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/PunchInDateEditShift"
-        tools:layout_editor_absoluteX="30dp" />
+        app:layout_constraintEnd_toStartOf="@+id/PunchOutTimeEditShift"
+        app:layout_constraintTop_toBottomOf="@+id/PunchInDateEditShift" />
 
     <Button
         android:id="@+id/PunchOutTimeEditShift"
@@ -73,12 +75,14 @@
         android:id="@+id/SaveEditShift"
         android:layout_width="190dp"
         android:layout_height="58dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="9dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent"
         android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="653dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
     <Button
         android:id="@+id/CancelEditShift"
@@ -95,21 +99,27 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginTop="104dp"
         android:text="Select starting time:"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/PunchInDateEditShift"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="114dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.393" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="28dp"
         android:text="Select ending time:"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="250dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.196" />
 </androidx.constraintlayout.widget.ConstraintLayout>

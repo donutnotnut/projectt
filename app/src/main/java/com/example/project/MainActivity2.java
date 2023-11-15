@@ -2,6 +2,7 @@ package com.example.project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -127,7 +128,7 @@ public class MainActivity2 extends AppCompatActivity {
                 else {
                     IsShiftActive=false;
                     endShift=new Timestamp(System.currentTimeMillis());
-                    v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#9AFD8F")));
+                    v.setBackgroundTintList(ContextCompat.getColorStateList(MainActivity2.this, R.color.accent));
                     Button btn = (Button)v;
                     btn.setText("Start Shift");
                     ConnectionHelper connectionHelper= new ConnectionHelper();
