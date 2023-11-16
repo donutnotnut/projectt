@@ -7,17 +7,39 @@
     android:background="@drawable/backgroud"
     tools:context=".MainActivity2">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="407dp"
+        android:layout_height="63dp"
+        android:background="@drawable/buttonsbackground"
+        android:backgroundTint="@color/accent_dark"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:buttonGravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.982"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.008"
+        app:titleTextColor="@color/accent_dark" />
+
     <TextView
         android:id="@+id/MainTextShiftHistoryAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="17dp"
         android:text="Welcome,uname"
         android:textColor="#FFFFFF"
         android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.111"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/StartShiftButtonMain"
@@ -171,7 +193,7 @@
         android:layout_height="66dp"
         android:background="@drawable/buttonsbackground"
         app:backgroundTint="@color/accent_dark"
-        app:itemIconTint="@color/accent"
+        app:itemIconTint="@drawable/selector"
         app:itemTextColor="@color/accent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

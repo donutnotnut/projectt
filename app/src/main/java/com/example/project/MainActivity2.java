@@ -1,14 +1,20 @@
 package com.example.project;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -25,7 +31,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity {
     private boolean IsShiftActive=false;
@@ -34,12 +42,17 @@ public class MainActivity2 extends AppCompatActivity {
     private double Salary =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         int id = getIntent().getIntExtra("id",0);
         if (id==0) {
             Log.e("error", "Error in id");
         }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.showOverflowMenu();
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         TextView text1= findViewById(R.id.textView2);
         TextView text2= findViewById(R.id.textView6);
@@ -82,6 +95,30 @@ public class MainActivity2 extends AppCompatActivity {
             Salary=result.getDouble("Salary");
             WelcomeText.setText("Welcome, "+result.getString("Name"));
             SalaryText.setText(String.valueOf(result.getDouble("Salary"))+"₪/h");
+
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from currentweek Where workerid = ?");
+            preparedStatement.setInt(1, id);
+            ResultSet alldaysofwork=preparedStatement.executeQuery();
+            alldaysofwork.next();
+            ArrayList<Boolean> days = new ArrayList<>();
+            days.add(alldaysofwork.getBoolean("Monday"));
+            days.add(alldaysofwork.getBoolean("Tuesday"));
+            days.add(alldaysofwork.getBoolean("Wednesday"));
+            days.add(alldaysofwork.getBoolean("Thursday"));
+            days.add(alldaysofwork.getBoolean("Friday"));
+            days.add(alldaysofwork.getBoolean("Saturday"));
+            days.add(alldaysofwork.getBoolean("Sunday"));
+            int currentDayOfWeek = LocalDate.now().getDayOfWeek().getValue();
+            for (int i=currentDayOfWeek;i<7;i++){
+                if (days.get(i)){
+                    String dayName = DayOfWeek.of(i + 1).name().substring(0, 1).toUpperCase() +
+                            DayOfWeek.of(i + 1).name().substring(1).toLowerCase();
+                    NextWorkday.setText(dayName);
+                    break;
+                }
+                else
+                    NextWorkday.setText("No more shifts this week");
+            }
             connection.close();
         } catch (SQLException e) {
             Log.e("error with server", e.getMessage());
@@ -171,6 +208,52 @@ public class MainActivity2 extends AppCompatActivity {
                 return false;
             }
         });
+        if (sharedPreferences.getString("email",null)==null) {
+            Connection connection = new ConnectionHelper().connectionclass();
+            try {
+                ResultSet result = connection.createStatement().executeQuery("SELECT * FROM info WHERE ID = " + id);
+                result.next();
+                String email = result.getString("Email");
+                String password = result.getString("Password");
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity2.this);
+                builder.setTitle("Saving Password");
+                builder.setMessage("Do you want to save your password?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("email", email);
+                        editor.putString("password", password);
+                        editor.apply();
+                    }
+                });
+                builder.setNegativeButton("No", null);
+                builder.show();
 
+            } catch (SQLException e) {
+                Log.e("error with server", e.getMessage());
+            }
+        }
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menutop, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 }
