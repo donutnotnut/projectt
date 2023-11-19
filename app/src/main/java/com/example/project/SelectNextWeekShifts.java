@@ -82,6 +82,16 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         if (id==0) {
             Log.e("error", "Error in id");
         }
+        String name = "";
+        try {
+            Connection com = new ConnectionHelper().connectionclass();
+            PreparedStatement ps = com.prepareStatement("select * from info where ID='"+id+"'");
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            name = rs.getString("Name");
+        }catch (SQLException e) {
+            Log.e("error", e.getMessage());
+        }
         try {
             PreparedStatement ps = connection.prepareStatement("select * from NextWeek where WorkerID='"+id+"'");
             ResultSet rs = ps.executeQuery();
@@ -175,9 +185,13 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                     while (working.next()) {
                         ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='" + working.getInt("WorkerID") + "'");
                         nameworker.next();
-                        names.add(nameworker.getString("Name"));
+                        if (!nameworker.getString("Name").equals(name)) {
+                            names.add(nameworker.getString("Name"));
+                        }
                     }
-
+                    if (names.size() == 0) {
+                        names.add("No one");
+                    }
                     arrayforadapter.add(new workdayitem(day, (ArrayList<String>) names.clone()));
                 }
             }

@@ -66,8 +66,15 @@ public class Editingshift extends AppCompatActivity {
         EndLocalDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
         PunchInDate.setText(StartLocalDate.getMonthValue()+"/"+StartLocalDate.getDayOfMonth());
         PunchInTime.setText(StartLocalDate.getHour()+":"+StartLocalDate.getMinute());
+        if (PunchInTime.getText().length()<=4) {
+            PunchInTime.append("0");
+        }
         PunchOutDate.setText(EndLocalDate.getMonthValue()+"/"+EndLocalDate.getDayOfMonth());
         PunchOutTime.setText(EndLocalDate.getHour()+":"+EndLocalDate.getMinute());
+        if (PunchOutTime.getText().length()<=4) {
+            Log.e("done","done");
+            PunchOutTime.append("0");
+        }
         DatePickerDialog DatePunchInPicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -90,6 +97,9 @@ public class Editingshift extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 StartLocalDate=StartLocalDate.withHour(hourOfDay).withMinute(minute);
                 PunchInTime.setText(StartLocalDate.getHour()+":"+StartLocalDate.getMinute());
+                if (PunchInTime.getText().length()<=4) {
+                    PunchInTime.append("0");
+                }
             }
         },StartLocalDate.getHour(),StartLocalDate.getMinute(),true);
         TimePickerDialog TimePunchOutPicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
@@ -98,7 +108,9 @@ public class Editingshift extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 EndLocalDate=EndLocalDate.withHour(hourOfDay).withMinute(minute);
                 PunchOutTime.setText(EndLocalDate.getHour()+":"+EndLocalDate.getMinute());
-            }
+                if (PunchOutTime.getText().length()<=4) {
+                    PunchOutTime.append("0");}
+                }
         },EndLocalDate.getHour(),EndLocalDate.getMinute(),true);
         PunchInDate.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -85,57 +85,72 @@ public class MainActivity2 extends AppCompatActivity {
         NextWorkday.startAnimation(animation);
         StartShift.startAnimation(animation);
         CustomPunchIn.startAnimation(animation);
-
+        Connection connection = new ConnectionHelper().connectionclass();
         //initial setup for texts
-        try {
-            ConnectionHelper connectionHelper = new ConnectionHelper();
-            Connection connection = connectionHelper.connectionclass();
-            ResultSet result = connection.createStatement().executeQuery("SELECT * FROM info WHERE ID='"+id+"'");
-            result.next();
-            Salary=result.getDouble("Salary");
-            WelcomeText.setText("Welcome, "+result.getString("Name"));
-            SalaryText.setText(String.valueOf(result.getDouble("Salary"))+"₪/h");
 
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from currentweek Where workerid = ?");
             preparedStatement.setInt(1, id);
-            ResultSet alldaysofwork=preparedStatement.executeQuery();
-            alldaysofwork.next();
-            ArrayList<Boolean> days = new ArrayList<>();
-            days.add(alldaysofwork.getBoolean("Monday"));
-            days.add(alldaysofwork.getBoolean("Tuesday"));
-            days.add(alldaysofwork.getBoolean("Wednesday"));
-            days.add(alldaysofwork.getBoolean("Thursday"));
-            days.add(alldaysofwork.getBoolean("Friday"));
-            days.add(alldaysofwork.getBoolean("Saturday"));
-            days.add(alldaysofwork.getBoolean("Sunday"));
-            int currentDayOfWeek = LocalDate.now().getDayOfWeek().getValue();
-            for (int i=currentDayOfWeek;i<7;i++){
-                if (days.get(i)){
-                    String dayName = DayOfWeek.of(i + 1).name().substring(0, 1).toUpperCase() +
-                            DayOfWeek.of(i + 1).name().substring(1).toLowerCase();
-                    NextWorkday.setText(dayName);
-                    break;
+            ResultSet alldaysofwork = preparedStatement.executeQuery();
+
+            if (alldaysofwork.next()) {
+                ArrayList<Boolean> days = new ArrayList<>();
+                days.add(alldaysofwork.getBoolean("Monday"));
+                days.add(alldaysofwork.getBoolean("Tuesday"));
+                days.add(alldaysofwork.getBoolean("Wednesday"));
+                days.add(alldaysofwork.getBoolean("Thursday"));
+                days.add(alldaysofwork.getBoolean("Friday"));
+                days.add(alldaysofwork.getBoolean("Saturday"));
+                days.add(alldaysofwork.getBoolean("Sunday"));
+
+                int currentDayOfWeek = LocalDate.now().getDayOfWeek().getValue();
+
+                Log.e("day", "Current Day of Week: " + currentDayOfWeek);
+
+                for (int i = 0; i < 7; i++) {
+                    int nextDayIndex = (currentDayOfWeek + i) % 7;
+                    if (days.get(nextDayIndex)) {
+                        String dayName = DayOfWeek.of(nextDayIndex + 1).name().substring(0, 1).toUpperCase() +
+                                DayOfWeek.of(nextDayIndex + 1).name().substring(1).toLowerCase();
+                        NextWorkday.setText(dayName);
+                        Log.e("day", "Found next workday: " + dayName);
+                        break;
+                    } else if (i == 6) {
+                        NextWorkday.setText("No more shifts this week");
+                        Log.e("day", "No more shifts this week");
+                    }
                 }
-                else
-                    NextWorkday.setText("No more shifts this week");
+            } else {
+                NextWorkday.setText("No shifts found for the given worker ID");
+                Log.e("day", "No shifts found for the given worker ID");
             }
+
             connection.close();
         } catch (SQLException e) {
             Log.e("error with server", e.getMessage());
         }
+
+
         // time for main menu functional
         Connection con = new ConnectionHelper().connectionclass();
         try {
+            String q="SELECT * from info WHERE ID=?";
+            PreparedStatement preps = con.prepareStatement(q);
+            preps.setInt(1, id);
+            ResultSet result = preps.executeQuery();
+            result.next();
+            Salary = result.getDouble("Salary");
+            WelcomeText.setText("Welcome, "+result.getString("Name"));
             double hours =0;
             String query = "SELECT * FROM shifthistory WHERE WorkerID = ? AND StartTime >= ?";
             LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
             preparedStatement.setDate(2, java.sql.Date.valueOf(firstDayOfMonth.toString()));
-            ResultSet result = preparedStatement.executeQuery();
-            while (result.next()){
-                Timestamp start=result.getTimestamp("StartTime");
-                Timestamp end = result.getTimestamp("EndTime");
+            ResultSet res = preparedStatement.executeQuery();
+            while (res.next()){
+                Timestamp start=res.getTimestamp("StartTime");
+                Timestamp end = res.getTimestamp("EndTime");
                 long timeDifference = end.getTime() - start.getTime();
                 hours += (double) timeDifference / (1000 * 60 * 60);
             }
@@ -145,6 +160,7 @@ public class MainActivity2 extends AppCompatActivity {
             hours=Double.parseDouble(formattedValue);
             HoursText.setText(hours+" hours");
             double earned=hours*Salary;
+            SalaryText.setText(Salary+"₪");
             formattedValue = decimalFormat.format(earned);
             earned=Double.parseDouble(formattedValue);
             EarnedText.setText(earned+"₪");
@@ -209,9 +225,9 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
         if (sharedPreferences.getString("email",null)==null) {
-            Connection connection = new ConnectionHelper().connectionclass();
+            Connection connectionclass = new ConnectionHelper().connectionclass();
             try {
-                ResultSet result = connection.createStatement().executeQuery("SELECT * FROM info WHERE ID = " + id);
+                ResultSet result = connectionclass.createStatement().executeQuery("SELECT * FROM info WHERE ID = " + id);
                 result.next();
                 String email = result.getString("Email");
                 String password = result.getString("Password");
