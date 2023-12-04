@@ -40,6 +40,9 @@ public class MainActivity2 extends AppCompatActivity {
     private Timestamp startShift=null;
     private Timestamp endShift=null;
     private double Salary =0;
+    private double hours =0;
+    private double earned =0;
+    private String name = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -141,7 +144,8 @@ public class MainActivity2 extends AppCompatActivity {
             result.next();
             Salary = result.getDouble("Salary");
             WelcomeText.setText("Welcome, "+result.getString("Name"));
-            double hours =0;
+            name = result.getString("Name")+"'s "+result.getString("Surname")+" information";
+            hours =0;
             String query = "SELECT * FROM shifthistory WHERE WorkerID = ? AND StartTime >= ?";
             LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
             PreparedStatement preparedStatement = con.prepareStatement(query);
@@ -159,7 +163,7 @@ public class MainActivity2 extends AppCompatActivity {
             String formattedValue = decimalFormat.format(hours);
             hours=Double.parseDouble(formattedValue);
             HoursText.setText(hours+" hours");
-            double earned=hours*Salary;
+            earned=hours*Salary;
             SalaryText.setText(Salary+"₪");
             formattedValue = decimalFormat.format(earned);
             earned=Double.parseDouble(formattedValue);
@@ -262,14 +266,26 @@ public class MainActivity2 extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-        return super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.Logout){
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return super.onOptionsItemSelected(item);
+        }
+        else{
+            String string = "Name: "+name+"\nHours worked: "+hours+" hours"+"\nEarnings: "+earned+"₪"+"\nSalary: "+Salary+"₪/h";
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, string);
+            startActivity(Intent.createChooser(intent, "Share via"));
+            return super.onOptionsItemSelected(item);
+        }
+
     }
 }
