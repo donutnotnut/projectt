@@ -144,7 +144,7 @@ public class MainActivity2 extends AppCompatActivity {
             result.next();
             Salary = result.getDouble("Salary");
             WelcomeText.setText("Welcome, "+result.getString("Name"));
-            name = result.getString("Name")+"'s "+result.getString("Surname")+" information";
+            name = result.getString("Name")+"'s "+result.getString("Surname")+" information:";
             hours =0;
             String query = "SELECT * FROM shifthistory WHERE WorkerID = ? AND StartTime >= ?";
             LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
@@ -279,7 +279,7 @@ public class MainActivity2 extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
         else{
-            String string = "Name: "+name+"\nHours worked: "+hours+" hours"+"\nEarnings: "+earned+"₪"+"\nSalary: "+Salary+"₪/h";
+            String string = name+"\nHours worked: "+hours+" hours"+"\nEarnings: "+earned+"₪"+"\nSalary: "+Salary+"₪/h";
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, string);
