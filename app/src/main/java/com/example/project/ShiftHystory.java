@@ -58,6 +58,7 @@ public class ShiftHystory extends AppCompatActivity {
                 String startString = simpleDateFormat.format(start);
                 String endString = simpleDateFormat.format(end);
                 shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID"), start, end, ""));
+                con.close();
             }
         } catch (SQLException e) {
             Log.e("error", e.getMessage());

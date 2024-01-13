@@ -5,30 +5,32 @@ import android.util.Log;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class ConnectionHelper {
-    Connection con;
-    String uname, pass,ip,port,database;
 
-    public Connection connectionclass()
-    {
-        ip = "10.0.2.2";
-        database="project";
-        uname="donut";
-        pass="artem1409";
-        port = "1433";
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        Connection connection=null;
-        String connectionUrl=null;
+    // Credentials and connection details
+    private static final String ip = "bsqwofv2ctgjiksuem7o-mysql.services.clever-cloud.com";
+    private static final String database = "bsqwofv2ctgjiksuem7o";
+    private static final String uname = "uhsnrjgwdiqnzjur";
+    private static final String pass = "Ir3Qdnt4Kys0d5Cg0SJ8";
+    private static final String port = "3306";
+
+    public Connection connectionclass() {
+        Connection connection = null;
+        String connectionUrl = "jdbc:mysql://" + ip + ":" + port + "/" + database;
+
         try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connectionUrl = "jdbc:jtds:sqlserver://" + ip + ":" + port + ";databaseName=" + database + ";user=" + uname + ";password=" + pass;
-            connection = DriverManager.getConnection(connectionUrl);
-        }
-        catch (Exception ex){
+            Class.forName("com.mysql.jdbc.Driver");
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            connection = DriverManager.getConnection(connectionUrl, uname, pass);
+        } catch (SQLException | ClassNotFoundException ex) {
             Log.e("error", ex.getMessage());
+            ex.printStackTrace();
         }
+
         return connection;
     }
 }

@@ -146,7 +146,6 @@ public class CustomPunchIn extends AppCompatActivity {
                     });
                     AlertDialog alert=builder.create();
                     alert.show();
-                    connection.close();
 
                 } catch (SQLException e) {
                     Log.e("error while pushing", e.getMessage());

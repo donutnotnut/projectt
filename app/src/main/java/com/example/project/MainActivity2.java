@@ -1,17 +1,30 @@
 package com.example.project;
 
+import static android.text.format.DateUtils.formatElapsedTime;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +33,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,39 +50,46 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity {
-    private boolean IsShiftActive=false;
-    private Timestamp startShift=null;
-    private Timestamp endShift=null;
-    private double Salary =0;
-    private double hours =0;
-    private double earned =0;
+    private Runnable updateNotificationRunnable;
+    private boolean IsShiftActive = false;
+    private Timestamp startShift = null;
+    private Timestamp endShift = null;
+    private double Salary = 0;
+    private double hours = 0;
+    private double earned = 0;
     private String name = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        int id = getIntent().getIntExtra("id",0);
+        SharedPreferences sharedPreferences3 = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        int id = sharedPreferences3.getInt("id", 0);
         if (id==0) {
-            Log.e("error", "Error in id");
+            Log.e("error", "id is 0");
+            Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+            startActivity(intent);
         }
+        NotificationManager notificationManager3 = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager3.cancel("SLAY",1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.showOverflowMenu();
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
-        TextView text1= findViewById(R.id.textView2);
-        TextView text2= findViewById(R.id.textView6);
-        TextView text3= findViewById(R.id.textView7);
-        TextView text4= findViewById(R.id.textView8);
-        TextView WelcomeText= findViewById(R.id.MainTextShiftHistoryAdmin);
+        TextView text1 = findViewById(R.id.textView2);
+        TextView text2 = findViewById(R.id.textView6);
+        TextView text3 = findViewById(R.id.textView7);
+        TextView text4 = findViewById(R.id.textView8);
+        TextView WelcomeText = findViewById(R.id.MainTextShiftHistoryAdmin);
         TextView HoursText = findViewById(R.id.HoursTextMain);
         TextView EarnedText = findViewById(R.id.EarnedTextMain);
         TextView SalaryText = findViewById(R.id.SalaryTextMain);
         TextView NextWorkday = findViewById(R.id.NextWorkdayTextMain);
         Button StartShift = findViewById(R.id.StartShiftButtonMain);
         Button CustomPunchIn = findViewById(R.id.CustomShiftButtonMain);
-        BottomNavigationView tabs=findViewById(R.id.tabslayout);
+        BottomNavigationView tabs = findViewById(R.id.tabslayout);
         tabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 
             @Override
@@ -89,6 +110,8 @@ public class MainActivity2 extends AppCompatActivity {
         StartShift.startAnimation(animation);
         CustomPunchIn.startAnimation(animation);
         Connection connection = new ConnectionHelper().connectionclass();
+        SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+
         //initial setup for texts
 
         try {
@@ -132,28 +155,26 @@ public class MainActivity2 extends AppCompatActivity {
         } catch (SQLException e) {
             Log.e("error with server", e.getMessage());
         }
-
-
         // time for main menu functional
         Connection con = new ConnectionHelper().connectionclass();
         try {
-            String q="SELECT * from info WHERE ID=?";
+            String q = "SELECT * from info WHERE ID=?";
             PreparedStatement preps = con.prepareStatement(q);
             preps.setInt(1, id);
             ResultSet result = preps.executeQuery();
             result.next();
             Salary = result.getDouble("Salary");
-            WelcomeText.setText("Welcome, "+result.getString("Name"));
-            name = result.getString("Name")+"'s "+result.getString("Surname")+" information:";
-            hours =0;
+            WelcomeText.setText("Welcome, " + result.getString("Name"));
+            name = result.getString("Name") + "'s " + result.getString("Surname") + " information:";
+            hours = 0;
             String query = "SELECT * FROM shifthistory WHERE WorkerID = ? AND StartTime >= ?";
             LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
             preparedStatement.setDate(2, java.sql.Date.valueOf(firstDayOfMonth.toString()));
             ResultSet res = preparedStatement.executeQuery();
-            while (res.next()){
-                Timestamp start=res.getTimestamp("StartTime");
+            while (res.next()) {
+                Timestamp start = res.getTimestamp("StartTime");
                 Timestamp end = res.getTimestamp("EndTime");
                 long timeDifference = end.getTime() - start.getTime();
                 hours += (double) timeDifference / (1000 * 60 * 60);
@@ -161,35 +182,75 @@ public class MainActivity2 extends AppCompatActivity {
             con.close();
             DecimalFormat decimalFormat = new DecimalFormat("#.0");
             String formattedValue = decimalFormat.format(hours);
-            hours=Double.parseDouble(formattedValue);
-            HoursText.setText(hours+" hours");
-            earned=hours*Salary;
-            SalaryText.setText(Salary+"₪");
+            hours = Double.parseDouble(formattedValue);
+            HoursText.setText(hours + " hours");
+            earned = hours * Salary;
+            SalaryText.setText(Salary + "₪");
             formattedValue = decimalFormat.format(earned);
-            earned=Double.parseDouble(formattedValue);
-            EarnedText.setText(earned+"₪");
-        }catch (SQLException e){
+            earned = Double.parseDouble(formattedValue);
+            EarnedText.setText(earned + "₪");
+        } catch (SQLException e) {
             Log.e("error while counting hours", e.getMessage());
         }
+        //notif
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(MainActivity2.this, "CHANNEL_ID");
+        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
+        notifBuilder.setCustomContentView(remoteViews);
+        notifBuilder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+        notifBuilder.setSmallIcon(R.drawable.ic_launcher_background);
+        notifBuilder.setColorized(true);
+        notifBuilder.setOngoing(true);
+        notifBuilder.setSilent(true);
+        notifBuilder.setColor(ContextCompat.getColor(MainActivity2.this, R.color.accent_dark));
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity2.this);
+        notificationManager.createNotificationChannel(new NotificationChannel("CHANNEL_ID", "CHANNEL_NAME", NotificationManager.IMPORTANCE_HIGH));
+        Handler handler = new Handler(Looper.getMainLooper());
         //button punch in functional
         StartShift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!IsShiftActive) {
-                    startShift =new Timestamp(System.currentTimeMillis());
+                    if (startShift==null) {
+                        startShift = new Timestamp(System.currentTimeMillis());
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putLong("startShift", startShift.getTime());
+                        editor.apply();
+                        Log.e("log","sucesfully set");
+                        updateNotificationRunnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                // Update the notification's RemoteViews
+                                updateNotification(remoteViews, notificationManager, notifBuilder);
+                                if (ActivityCompat.checkSelfPermission(MainActivity2.this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(MainActivity2.this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                                    return;
+                                }
+
+                                handler.postDelayed(this, 1000);
+                            }
+                        };
+                        handler.post(updateNotificationRunnable);
+                    }
                     IsShiftActive = true;
                     v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#fa737c")));
-                    Button btn = (Button)v;
+                    Button btn = (Button) v;
                     btn.setText("End Shift");
-                }
-                else {
-                    IsShiftActive=false;
-                    endShift=new Timestamp(System.currentTimeMillis());
+
+                } else {
+                    SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong("startShift", 0);
+                    editor.apply();
+                    Log.e("log","sucesfully deleted");
+                    Log.e("log32",sharedPreferences.getLong("startShift",0)+"");
+                    IsShiftActive = false;
+                    endShift = new Timestamp(System.currentTimeMillis());
                     v.setBackgroundTintList(ContextCompat.getColorStateList(MainActivity2.this, R.color.accent));
-                    Button btn = (Button)v;
+                    Button btn = (Button) v;
                     btn.setText("Start Shift");
-                    ConnectionHelper connectionHelper= new ConnectionHelper();
-                    Connection connection=connectionHelper.connectionclass();
+                    ConnectionHelper connectionHelper = new ConnectionHelper();
+                    Connection connection = connectionHelper.connectionclass();
                     String insertSQL = "INSERT INTO shifthistory (WorkerID, StartTime, EndTime) VALUES (?, ?, ?)";
                     try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
                         preparedStatement.setInt(1, id);
@@ -201,13 +262,17 @@ public class MainActivity2 extends AppCompatActivity {
                         Log.e("error while pushing", e.getMessage());
 
                     }
+                    startShift=null;
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity2.this);
+                    notificationManager.cancel(1);
+                    handler.removeCallbacks(updateNotificationRunnable);
                 }
             }
         });
         CustomPunchIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(getApplicationContext(), com.example.project.CustomPunchIn.class);
+                Intent intent = new Intent(getApplicationContext(), com.example.project.CustomPunchIn.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }
@@ -215,12 +280,12 @@ public class MainActivity2 extends AppCompatActivity {
         tabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId()==R.id.HistoryItem){
+                if (item.getItemId() == R.id.HistoryItem) {
                     Intent intent = new Intent(getApplicationContext(), ShiftHystory.class);
                     intent.putExtra("id", id);
                     startActivity(intent);
                 }
-                if (item.getItemId()==R.id.NextWeekShiftTem) {
+                if (item.getItemId() == R.id.NextWeekShiftTem) {
                     Intent intent = new Intent(getApplicationContext(), SelectNextWeekShifts.class);
                     intent.putExtra("id", id);
                     startActivity(intent);
@@ -228,11 +293,12 @@ public class MainActivity2 extends AppCompatActivity {
                 return false;
             }
         });
-        if (sharedPreferences.getString("email",null)==null) {
+        if (sharedPreferences.getString("email", null) == null) {
             Connection connectionclass = new ConnectionHelper().connectionclass();
             try {
                 ResultSet result = connectionclass.createStatement().executeQuery("SELECT * FROM info WHERE ID = " + id);
                 result.next();
+                connectionclass.close();
                 String email = result.getString("Email");
                 String password = result.getString("Password");
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity2.this);
@@ -255,10 +321,15 @@ public class MainActivity2 extends AppCompatActivity {
                 Log.e("error with server", e.getMessage());
             }
         }
+        if (sharedPreferences2.getLong("startShift",0)!=0){
+            startShift = new Timestamp(sharedPreferences2.getLong("startShift",0));
+            StartShift.performClick();
+        }
 
     }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menutop, menu);
         return true;
@@ -267,7 +338,7 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if (item.getItemId() == R.id.Logout){
+        if (item.getItemId() == R.id.Logout) {
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
@@ -277,9 +348,8 @@ public class MainActivity2 extends AppCompatActivity {
             startActivity(intent);
             finish();
             return super.onOptionsItemSelected(item);
-        }
-        else{
-            String string = name+"\nHours worked: "+hours+" hours"+"\nEarnings: "+earned+"₪"+"\nSalary: "+Salary+"₪/h";
+        } else {
+            String string = name + "\nHours worked: " + hours + " hours" + "\nEarnings: " + earned + "₪" + "\nSalary: " + Salary + "₪/h";
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, string);
@@ -288,4 +358,24 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
     }
+
+    private void updateNotification(RemoteViews remoteViews, NotificationManagerCompat notificationManager, NotificationCompat.Builder notifBuilder) {
+        long elapsedTime = System.currentTimeMillis() - startShift.getTime();
+        String formattedTime = formatElapsedTime(elapsedTime);
+        remoteViews.setTextViewText(R.id.timertext, formattedTime);
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        notificationManager.notify(1, notifBuilder.build());
+    }
+    private String formatElapsedTime(long elapsedTime) {
+        long seconds = (elapsedTime / 1000) % 60;
+        long minutes = (elapsedTime / (1000 * 60)) % 60;
+        long hours = elapsedTime / (1000 * 60 * 60);
+
+        // Format the result as HH:MM:SS
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
 }

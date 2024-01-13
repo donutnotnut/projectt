@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -154,7 +156,7 @@ public class Editingshift extends AppCompatActivity {
                     pstmt.setInt(3, ShiftId);
                     pstmt.executeUpdate();
                     con.close();
-                    Toast.makeText(Editingshift.this, "Shift Updated", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Shift Updated", Snackbar.LENGTH_LONG).show();
                 }
                 catch (Exception e){
                     Log.e("error", e.getMessage());

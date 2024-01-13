@@ -2,6 +2,7 @@ package com.example.project;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,9 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             password.setText(Password);
             btn.performClick();
         }
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     connection = conh.connectionclass();
                     ResultSet result = connection.createStatement().executeQuery("SELECT * FROM info WHERE Email = '" + email.getText().toString() + "'");
                     if (!result.next()){
-                        Toast.makeText(MainActivity.this, "Wrong email", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(v, "Wrong email", Snackbar.LENGTH_SHORT).show();
                     }
                     if (result.getString("Password").equals(password.getText().toString())) {
                         int id=result.getInt("ID");
@@ -59,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                             intent.putExtra("id",id);
                             startActivity(intent);
+                            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("id", id);
+                            editor.apply();
                         }
                         else{
                             Intent intent = new Intent(MainActivity.this, AdminMainPage.class);
@@ -68,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                     else {
-                        Toast.makeText(MainActivity.this, "Wrong email", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(v, "Wrong password", Snackbar.LENGTH_SHORT).show();
                     }
                 }
                 catch (Exception e){

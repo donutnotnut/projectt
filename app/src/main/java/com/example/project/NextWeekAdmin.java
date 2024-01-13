@@ -11,6 +11,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +30,7 @@ public class NextWeekAdmin extends AppCompatActivity {
         Button button = findViewById(R.id.AcceptTheChanges);
         ArrayList<NextWeekScheduleItem> array= new ArrayList<>();
         try {
-            PreparedStatement getIdWithWorkdays= connection.prepareStatement("SELECT * FROM nextweek");
+            PreparedStatement getIdWithWorkdays= connection.prepareStatement("SELECT * FROM NextWeek");
             ResultSet resultSet = getIdWithWorkdays.executeQuery();
             while (resultSet.next()){
                 ResultSet namegetter= connection.prepareStatement("SELECT * FROM info WHERE id='"+resultSet.getInt("WorkerID")+"'").executeQuery();
@@ -49,7 +51,7 @@ public class NextWeekAdmin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Connection connection1 = new ConnectionHelper().connectionclass();
-                String updateQuery = "UPDATE CurrentWeek SET Sunday=?, Monday=?, Tuesday=?, Wednesday=?, Thursday=?, Friday=?, Saturday=? WHERE WorkerID=?";
+                String updateQuery = "UPDATE currentweek SET Sunday=?, Monday=?, Tuesday=?, Wednesday=?, Thursday=?, Friday=?, Saturday=? WHERE WorkerID=?";
 
                 try (PreparedStatement preparedStatement = connection1.prepareStatement(updateQuery)) {
                     for (int i = 0; i < array.size(); i++) {
@@ -66,17 +68,18 @@ public class NextWeekAdmin extends AppCompatActivity {
                         preparedStatement.executeUpdate();
                     }
                     String updateQuery2 = "UPDATE NextWeek " +
-                            "SET Sunday = NULL, " +
-                            "    Monday = NULL, " +
-                            "    Tuesday = NULL, " +
-                            "    Wednesday = NULL, " +
-                            "    Thursday = NULL, " +
-                            "    Friday = NULL, " +
-                            "    Saturday = NULL, " +
+                            "SET Sunday = 0, " +
+                            "    Monday = 0, " +
+                            "    Tuesday = 0, " +
+                            "    Wednesday = 0, " +
+                            "    Thursday = 0, " +
+                            "    Friday = 0, " +
+                            "    Saturday = 0, " +
                             "    Locked = 0";
                     PreparedStatement preparedStatement2 = connection1.prepareStatement(updateQuery2);
                     preparedStatement2.executeUpdate();
-                    Toast.makeText(NextWeekAdmin.this, "Changes saved and pushed to workers", Toast.LENGTH_LONG).show();
+                    Snackbar.make(v, "Changes Accepted", Snackbar.LENGTH_SHORT).show();
+                    connection1.close();
                 }
                 catch (Exception e){
                     Log.e("error 2",e.getMessage());

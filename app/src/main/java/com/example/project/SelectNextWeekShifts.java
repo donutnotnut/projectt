@@ -89,6 +89,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
             ResultSet rs = ps.executeQuery();
             rs.next();
             name = rs.getString("Name");
+            com.close();
         }catch (SQLException e) {
             Log.e("error", e.getMessage());
         }
@@ -96,6 +97,15 @@ public class SelectNextWeekShifts extends AppCompatActivity {
             PreparedStatement ps = connection.prepareStatement("select * from NextWeek where WorkerID='"+id+"'");
             ResultSet rs = ps.executeQuery();
             rs.next();
+            Log.e("log", rs.getBoolean("Locked") + "");
+            Log.e("log", rs.getBoolean("sunday") + "");
+            Log.e("log", rs.getBoolean("monday") + "");
+            Log.e("log", rs.getBoolean("tuesday") + "");
+            Log.e("log", rs.getBoolean("wednesday") + "");
+            Log.e("log", rs.getBoolean("thursday") + "");
+            Log.e("log", rs.getBoolean("friday") + "");
+            Log.e("log", rs.getBoolean("saturday") + "");
+            Log.e("log", rs.getInt("WorkerID") + "");
             if (rs.getBoolean("Locked")) {
                 SetterCheckBox(array);
                 Warning.setVisibility(View.VISIBLE);
@@ -115,7 +125,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     PreparedStatement preparedStatement = connection.prepareStatement("UPDATE NextWeek " +
-                                            "SET locked = 1, " +
+                                            "SET Locked = 1, " +
                                             "sunday = ?, " +
                                             "monday = ?, " +
                                             "tuesday = ?, " +
@@ -135,7 +145,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                                     preparedStatement.executeUpdate();
                                     SetterCheckBox(array);
                                     Warning.setVisibility(View.VISIBLE);
-
+                                    connection.close();
                                 }
                                 catch (SQLException e) {
                                     Log.e("error", e.getMessage());
@@ -173,28 +183,29 @@ public class SelectNextWeekShifts extends AppCompatActivity {
 
         try {
             ResultSet rs = con.createStatement().executeQuery("select * from currentweek where WorkerID='" + id + "'");
-            rs.next();
 
             String[] daysOfWeek = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-            for (String day : daysOfWeek) {
-                if (rs.getBoolean(day.toLowerCase())) {
-                    ResultSet working = con.createStatement().executeQuery("select * from currentweek where " + day + "=1");
-                    ArrayList<String> names = new ArrayList<>();
-
-                    while (working.next()) {
-                        ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='" + working.getInt("WorkerID") + "'");
-                        nameworker.next();
-                        if (!nameworker.getString("Name").equals(name)) {
-                            names.add(nameworker.getString("Name"));
+            if (rs.next()) {
+                for (String day : daysOfWeek) {
+                    if (rs.getBoolean(day.toLowerCase())) {
+                        ResultSet working = con.createStatement().executeQuery("select * from currentweek where " + day + "=1");
+                        ArrayList<String> names = new ArrayList<>();
+                        while (working.next()) {
+                            ResultSet nameworker = con.createStatement().executeQuery("select * from info where id='" + working.getInt("WorkerID") + "'");
+                            nameworker.next();
+                            if (!nameworker.getString("Name").equals(name)) {
+                                names.add(nameworker.getString("Name"));
+                            }
                         }
+                        if (names.size() == 0) {
+                            names.add("No one");
+                        }
+                        arrayforadapter.add(new workdayitem(day, (ArrayList<String>) names.clone()));
                     }
-                    if (names.size() == 0) {
-                        names.add("No one");
-                    }
-                    arrayforadapter.add(new workdayitem(day, (ArrayList<String>) names.clone()));
                 }
+                con.close();
             }
+
         } catch (SQLException e) {
             e.printStackTrace(); // Handle the exception according to your needs
         }
