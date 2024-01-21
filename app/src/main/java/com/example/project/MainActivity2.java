@@ -22,10 +22,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,14 +65,40 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (sharedPreferences.getLong("LastUpdated",0)==0) {
+            AsyncTask asyncTask = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    try {
+                        Connection connection = new ConnectionHelper().connectionclass();
+                        if (connection != null) {
+                            ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM LastUpdated");
+                            resultSet.next();
+                            Timestamp timestamp = resultSet.getTimestamp("LastUpdated");
+                            editor.putLong("LastUpdated", timestamp.getTime());
+                        }
+                    }catch (Exception e){
+                        Log.e("error", e.getMessage());
+                    }
+                    return null;
+                }
+            };
+        }
+        Intent intent = new Intent(this, BackgroundCheck.class);
+        if (!BackgroundCheck.isServiceRunning()) {
+            startService(intent);
+        }
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         SharedPreferences sharedPreferences3 = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         int id = sharedPreferences3.getInt("id", 0);
         if (id==0) {
             Log.e("error", "id is 0");
-            Intent intent = new Intent(MainActivity2.this, MainActivity.class);
-            startActivity(intent);
+            Intent intent1 = new Intent(MainActivity2.this, MainActivity.class);
+            startActivity(intent1);
         }
         NotificationManager notificationManager3 = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager3.cancel("SLAY",1);
@@ -113,7 +141,7 @@ public class MainActivity2 extends AppCompatActivity {
         SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         //initial setup for texts
-
+        AlertDialog loading = loadingalert.showCustomDialog(MainActivity2.this);
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from currentweek Where workerid = ?");
             preparedStatement.setInt(1, id);
@@ -249,6 +277,7 @@ public class MainActivity2 extends AppCompatActivity {
                     v.setBackgroundTintList(ContextCompat.getColorStateList(MainActivity2.this, R.color.accent));
                     Button btn = (Button) v;
                     btn.setText("Start Shift");
+                    loading.show();
                     ConnectionHelper connectionHelper = new ConnectionHelper();
                     Connection connection = connectionHelper.connectionclass();
                     String insertSQL = "INSERT INTO shifthistory (WorkerID, StartTime, EndTime) VALUES (?, ?, ?)";
@@ -262,6 +291,7 @@ public class MainActivity2 extends AppCompatActivity {
                         Log.e("error while pushing", e.getMessage());
 
                     }
+                    loading.dismiss();
                     startShift=null;
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity2.this);
                     notificationManager.cancel(1);
@@ -293,12 +323,15 @@ public class MainActivity2 extends AppCompatActivity {
                 return false;
             }
         });
+        Log.e("email", sharedPreferences.getString("email", null) + "");
         if (sharedPreferences.getString("email", null) == null) {
+            loading.show();
             Connection connectionclass = new ConnectionHelper().connectionclass();
             try {
+
                 ResultSet result = connectionclass.createStatement().executeQuery("SELECT * FROM info WHERE ID = " + id);
                 result.next();
-                connectionclass.close();
+                loading.dismiss();
                 String email = result.getString("Email");
                 String password = result.getString("Password");
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity2.this);
@@ -316,6 +349,7 @@ public class MainActivity2 extends AppCompatActivity {
                 });
                 builder.setNegativeButton("No", null);
                 builder.show();
+                connectionclass.close();
 
             } catch (SQLException e) {
                 Log.e("error with server", e.getMessage());
@@ -325,6 +359,7 @@ public class MainActivity2 extends AppCompatActivity {
             startShift = new Timestamp(sharedPreferences2.getLong("startShift",0));
             StartShift.performClick();
         }
+        loading.dismiss();
 
     }
 

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,28 +29,44 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import kotlinx.coroutines.GlobalScope;
+
 public class SelectNextWeekShifts extends AppCompatActivity {
+    private ImageView background;
+    private CheckBox Monday;
+    private CheckBox Tuesday;
+    private CheckBox Wednesday;
+    private CheckBox Thursday;
+    private CheckBox Friday;
+    private CheckBox Saturday;
+    private CheckBox Sunday;
+    private TextView Warning;
+    private Button save;
+    private RecyclerView recyclerView;
+    private BottomNavigationView bottomNavigationView;
+    private int id =0;
+    private ArrayList<CheckBox> array = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int id = getIntent().getIntExtra("id",0);
+         id = getIntent().getIntExtra("id",0);
 
         setContentView(R.layout.activity_select_next_week_shifts);
-        ImageView background = findViewById(R.id.imageView3);
-        CheckBox Monday = findViewById(R.id.MondayCheckBoxSelectNextWeek);
-        CheckBox Tuesday = findViewById(R.id.TuesdayCheckBoxSelectNextWeek);
-        CheckBox Wednesday = findViewById(R.id.WednesdayCheckBoxSelectNextWeek);
-        CheckBox Thursday = findViewById(R.id.ThursdayCheckBoxSelectNextWeek);
-        CheckBox Friday = findViewById(R.id.FridayCheckBoxSelectNextWeek);
-        CheckBox Saturday = findViewById(R.id.SaturdayCheckBoxSelectNextWeek);
-        CheckBox Sunday = findViewById(R.id.SundayChekBoxSelectNextWeek);
-        TextView Warning = findViewById(R.id.ShitsWarningSelectNextWeek);
-        Button save= findViewById(R.id.button);
-        RecyclerView recyclerView = findViewById(R.id.CurrentWeekrRecycler);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.tabslayout);
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
+         background = findViewById(R.id.imageView3);
+         Monday = findViewById(R.id.MondayCheckBoxSelectNextWeek);
+         Tuesday = findViewById(R.id.TuesdayCheckBoxSelectNextWeek);
+         Wednesday = findViewById(R.id.WednesdayCheckBoxSelectNextWeek);
+         Thursday = findViewById(R.id.ThursdayCheckBoxSelectNextWeek);
+         Friday = findViewById(R.id.FridayCheckBoxSelectNextWeek);
+         Saturday = findViewById(R.id.SaturdayCheckBoxSelectNextWeek);
+         Sunday = findViewById(R.id.SundayChekBoxSelectNextWeek);
+         Warning = findViewById(R.id.ShitsWarningSelectNextWeek);
+         save = findViewById(R.id.button);
+         recyclerView = findViewById(R.id.CurrentWeekrRecycler);
+         bottomNavigationView = findViewById(R.id.tabslayout);
         Warning.startAnimation(animation);
         background.startAnimation(animation);
         Monday.startAnimation(animation);
@@ -60,8 +77,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         Saturday.startAnimation(animation);
         Sunday.startAnimation(animation);
         save.startAnimation(animation);
-        Connection connection = new ConnectionHelper().connectionclass();
-        ArrayList<CheckBox> array = new ArrayList<>();
+
         array.add(Monday);
         array.add(Tuesday);
         array.add(Wednesday);
@@ -69,6 +85,8 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         array.add(Friday);
         array.add(Saturday);
         array.add(Sunday);
+        new as().execute();
+
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 
@@ -93,75 +111,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         }catch (SQLException e) {
             Log.e("error", e.getMessage());
         }
-        try {
-            PreparedStatement ps = connection.prepareStatement("select * from NextWeek where WorkerID='"+id+"'");
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            Log.e("log", rs.getBoolean("Locked") + "");
-            Log.e("log", rs.getBoolean("sunday") + "");
-            Log.e("log", rs.getBoolean("monday") + "");
-            Log.e("log", rs.getBoolean("tuesday") + "");
-            Log.e("log", rs.getBoolean("wednesday") + "");
-            Log.e("log", rs.getBoolean("thursday") + "");
-            Log.e("log", rs.getBoolean("friday") + "");
-            Log.e("log", rs.getBoolean("saturday") + "");
-            Log.e("log", rs.getInt("WorkerID") + "");
-            if (rs.getBoolean("Locked")) {
-                SetterCheckBox(array);
-                Warning.setVisibility(View.VISIBLE);
-            }
-            else {
-                save.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog builder = new AlertDialog.Builder(SelectNextWeekShifts.this)
-                                .setTitle("Warning")
-                                .setMessage("You wont be able to change the days afterwards, are you sure?")
-                                .setPositiveButton("Yes", null)
-                                .setNegativeButton("No", null)
-                                .create();
-                        builder.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    PreparedStatement preparedStatement = connection.prepareStatement("UPDATE NextWeek " +
-                                            "SET Locked = 1, " +
-                                            "sunday = ?, " +
-                                            "monday = ?, " +
-                                            "tuesday = ?, " +
-                                            "wednesday = ?, " +
-                                            "thursday = ?, " +
-                                            "friday = ?, " +
-                                            "saturday = ? " +
-                                            "WHERE WorkerID = ?");
-                                    preparedStatement.setBoolean(1, Sunday.isChecked());
-                                    preparedStatement.setBoolean(2, Monday.isChecked());
-                                    preparedStatement.setBoolean(3, Tuesday.isChecked());
-                                    preparedStatement.setBoolean(4, Wednesday.isChecked());
-                                    preparedStatement.setBoolean(5, Thursday.isChecked());
-                                    preparedStatement.setBoolean(6, Friday.isChecked());
-                                    preparedStatement.setBoolean(7, Saturday.isChecked());
-                                    preparedStatement.setInt(8, id);
-                                    preparedStatement.executeUpdate();
-                                    SetterCheckBox(array);
-                                    Warning.setVisibility(View.VISIBLE);
-                                    connection.close();
-                                }
-                                catch (SQLException e) {
-                                    Log.e("error", e.getMessage());
-                                }
-                            }
-                        });
-                        builder.show();
 
-                    }
-                });
-            }
-
-        }
-        catch (Exception e) {
-            Log.e("error", e.getMessage());
-        }
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -207,14 +157,83 @@ public class SelectNextWeekShifts extends AppCompatActivity {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
+            e.printStackTrace();
         }
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
         AdapterCurrentWeek adapter = new AdapterCurrentWeek(arrayforadapter,this);
         recyclerView.setAdapter(adapter);
 
+    }
+    private class as extends android.os.AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Connection connection = new ConnectionHelper().connectionclass();
+                PreparedStatement ps = connection.prepareStatement("select * from NextWeek where WorkerID='"+id+"'");
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                if (rs.getBoolean("Locked")) {
+                    SetterCheckBox(array);
+                    Warning.setVisibility(View.VISIBLE);
+                }
+                else {
+                    save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertDialog builder = new AlertDialog.Builder(SelectNextWeekShifts.this)
+                                    .setTitle("Warning")
+                                    .setMessage("You wont be able to change the days afterwards, are you sure?")
+                                    .setPositiveButton("Yes", null)
+                                    .setNegativeButton("No", null)
+                                    .create();
+                            builder.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE NextWeek " +
+                                                "SET Locked = 1, " +
+                                                "sunday = ?, " +
+                                                "monday = ?, " +
+                                                "tuesday = ?, " +
+                                                "wednesday = ?, " +
+                                                "thursday = ?, " +
+                                                "friday = ?, " +
+                                                "saturday = ? " +
+                                                "WHERE WorkerID = ?");
+                                        preparedStatement.setBoolean(1, Sunday.isChecked());
+                                        preparedStatement.setBoolean(2, Monday.isChecked());
+                                        preparedStatement.setBoolean(3, Tuesday.isChecked());
+                                        preparedStatement.setBoolean(4, Wednesday.isChecked());
+                                        preparedStatement.setBoolean(5, Thursday.isChecked());
+                                        preparedStatement.setBoolean(6, Friday.isChecked());
+                                        preparedStatement.setBoolean(7, Saturday.isChecked());
+                                        preparedStatement.setInt(8, id);
+                                        preparedStatement.executeUpdate();
+                                        SetterCheckBox(array);
+                                        Warning.setVisibility(View.VISIBLE);
+                                        connection.close();
+                                    }
+                                    catch (SQLException e) {
+                                        Log.e("error", e.getMessage());
+                                    }
+                                }
+                            });
+                            builder.show();
+
+                        }
+                    });
+                }
+
+            }
+            catch (Exception e) {
+                Log.e("error", e.getMessage());
+            }
+            return null;
+        }
     }
     private void SetterCheckBox(ArrayList<CheckBox> array){
         for(int i=0;i<array.size();i++){

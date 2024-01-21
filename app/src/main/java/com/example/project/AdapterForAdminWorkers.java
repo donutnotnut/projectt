@@ -57,6 +57,12 @@ public class AdapterForAdminWorkers extends RecyclerView.Adapter<AdapterForAdmin
                         PreparedStatement ps = con.prepareStatement("DELETE FROM info WHERE ID=?");
                         ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
                         ps.execute();
+                        ps = con.prepareStatement("DELETE FROM NextWeek WHERE WorkerID=?");
+                        ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
+                        ps.execute();
+                        ps = con.prepareStatement("DELETE FROM currentweek WHERE WorkerID=?");
+                        ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
+                        ps.execute();
                         array.remove(holder.getAdapterPosition());
                         notifyDataSetChanged();
                     } catch (SQLException e) {

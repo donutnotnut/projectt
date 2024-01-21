@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -49,9 +50,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Connection connection = null;
-                    ConnectionHelper conh=new ConnectionHelper();
-                    connection = conh.connectionclass();
+                    AlertDialog dialog = new loadingalert().showCustomDialog(MainActivity.this);
+                    Connection connection = new ConnectionHelper().connectionclass();
                     ResultSet result = connection.createStatement().executeQuery("SELECT * FROM info WHERE Email = '" + email.getText().toString() + "'");
                     if (!result.next()){
                         Snackbar.make(v, "Wrong email", Snackbar.LENGTH_SHORT).show();
@@ -79,12 +79,12 @@ public class MainActivity extends AppCompatActivity {
                     else {
                         Snackbar.make(v, "Wrong password", Snackbar.LENGTH_SHORT).show();
                     }
+                    dialog.dismiss();
                 }
                 catch (Exception e){
                     Log.e("error",e.getMessage());
                 }
             }
         });
-
     }
 }

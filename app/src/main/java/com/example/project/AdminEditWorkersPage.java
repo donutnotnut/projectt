@@ -37,8 +37,9 @@ public class AdminEditWorkersPage extends AppCompatActivity {
             ResultSet result = con.createStatement().executeQuery("SELECT * FROM info");
             while (result.next()) {
                 array.add(new WorkerItem( result.getInt("ID"), result.getString("Name")+" "+result.getString("Surname")));
-                con.close();
+
             }
+            con.close();
         } catch (SQLException e) {
             Log.e("error", e.getMessage());
         }

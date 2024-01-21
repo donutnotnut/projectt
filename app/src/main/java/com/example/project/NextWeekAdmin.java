@@ -1,5 +1,6 @@
 package com.example.project;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class NextWeekAdmin extends AppCompatActivity {
@@ -29,6 +31,7 @@ public class NextWeekAdmin extends AppCompatActivity {
         Connection connection = new ConnectionHelper().connectionclass();
         Button button = findViewById(R.id.AcceptTheChanges);
         ArrayList<NextWeekScheduleItem> array= new ArrayList<>();
+        AlertDialog loading = loadingalert.showCustomDialog(this);
         try {
             PreparedStatement getIdWithWorkdays= connection.prepareStatement("SELECT * FROM NextWeek");
             ResultSet resultSet = getIdWithWorkdays.executeQuery();
@@ -38,6 +41,7 @@ public class NextWeekAdmin extends AppCompatActivity {
                 array.add(new NextWeekScheduleItem(namegetter.getInt("ID"),namegetter.getString("Name"),resultSet.getBoolean("Sunday"),resultSet.getBoolean("Monday"),resultSet.getBoolean("Tuesday"),resultSet.getBoolean("Wednesday"),resultSet.getBoolean("Thursday"),resultSet.getBoolean("Friday"),resultSet.getBoolean("Saturday")));
             }
             connection.close();
+            loading.dismiss();
         }
         catch (Exception e) {
             Log.e("error 1",e.getMessage());
@@ -78,6 +82,10 @@ public class NextWeekAdmin extends AppCompatActivity {
                             "    Locked = 0";
                     PreparedStatement preparedStatement2 = connection1.prepareStatement(updateQuery2);
                     preparedStatement2.executeUpdate();
+                    long timestampMillis = System.currentTimeMillis(); // Your timestamp
+                    java.sql.Timestamp timestamp = new java.sql.Timestamp(timestampMillis);
+                    String formattedDateTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timestamp);
+                    connection1.prepareStatement("UPDATE LastUpdated SET LastUpdated = '"+ timestamp+"'").executeUpdate();
                     Snackbar.make(v, "Changes Accepted", Snackbar.LENGTH_SHORT).show();
                     connection1.close();
                 }
