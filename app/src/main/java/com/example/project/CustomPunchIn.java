@@ -3,11 +3,13 @@ package com.example.project;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -127,29 +129,37 @@ public class CustomPunchIn extends AppCompatActivity {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Connection connection= new ConnectionHelper().connectionclass();
-                String insertSQL = "INSERT INTO shifthistory (WorkerID, StartTime, EndTime) VALUES (?, ?, ?)";
-                try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
-                    preparedStatement.setInt(1, id); // Replace with the actual ID value
-                    preparedStatement.setTimestamp(2, new Timestamp(PunchInTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
-                    preparedStatement.setTimestamp(3, new Timestamp(PunchOutTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
-                    preparedStatement.executeUpdate();
-                    connection.close();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CustomPunchIn.this).setTitle("Added succesfully").setMessage("Shift saved");
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            Intent intent = new Intent(CustomPunchIn.this, MainActivity2.class);
-                            intent.putExtra("id", id);
-                            startActivity(intent);
-                        }
-                    });
-                    AlertDialog alert=builder.create();
-                    alert.show();
+                @SuppressLint("StaticFieldLeak") AsyncTask asyncTask= new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        Connection connection= new ConnectionHelper().connectionclass();
+                        String insertSQL = "INSERT INTO shifthistory (WorkerID, StartTime, EndTime) VALUES (?, ?, ?)";
+                        try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+                            preparedStatement.setInt(1, id); // Replace with the actual ID value
+                            preparedStatement.setTimestamp(2, new Timestamp(PunchInTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
+                            preparedStatement.setTimestamp(3, new Timestamp(PunchOutTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
+                            preparedStatement.executeUpdate();
+                            connection.close();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(CustomPunchIn.this).setTitle("Added succesfully").setMessage("Shift saved");
+                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    Intent intent = new Intent(CustomPunchIn.this, MainActivity2.class);
+                                    intent.putExtra("id", id);
+                                    startActivity(intent);
+                                }
+                            });
+                            AlertDialog alert=builder.create();
+                            alert.show();
 
-                } catch (SQLException e) {
-                    Log.e("error while pushing", e.getMessage());
-                }
+                        } catch (SQLException e) {
+                            Log.e("error while pushing", e.getMessage());
+                        }
+                        return null;
+                    }
+                };
+                asyncTask.execute();
+
             }
         });
         Exit.setOnClickListener(new View.OnClickListener() {

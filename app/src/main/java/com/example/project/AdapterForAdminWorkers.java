@@ -1,7 +1,9 @@
 package com.example.project;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,22 +54,32 @@ public class AdapterForAdminWorkers extends RecyclerView.Adapter<AdapterForAdmin
                 builder.setMessage("Are you sure you want to delete this worker?");
                 builder.setCancelable(true);
                 builder.setPositiveButton("Yes", (dialog, which) -> {
-                    Connection con = new ConnectionHelper().connectionclass();
-                    try {
-                        PreparedStatement ps = con.prepareStatement("DELETE FROM info WHERE ID=?");
-                        ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
-                        ps.execute();
-                        ps = con.prepareStatement("DELETE FROM NextWeek WHERE WorkerID=?");
-                        ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
-                        ps.execute();
-                        ps = con.prepareStatement("DELETE FROM currentweek WHERE WorkerID=?");
-                        ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
-                        ps.execute();
-                        array.remove(holder.getAdapterPosition());
-                        notifyDataSetChanged();
-                    } catch (SQLException e) {
-                        Log.e("error", e.getMessage());
-                    }
+                    @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
+
+
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            Connection con = new ConnectionHelper().connectionclass();
+                            try {
+                                PreparedStatement ps = con.prepareStatement("DELETE FROM info WHERE ID=?");
+                                ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
+                                ps.execute();
+                                ps = con.prepareStatement("DELETE FROM NextWeek WHERE WorkerID=?");
+                                ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
+                                ps.execute();
+                                ps = con.prepareStatement("DELETE FROM currentweek WHERE WorkerID=?");
+                                ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
+                                ps.execute();
+                                array.remove(holder.getAdapterPosition());
+                                notifyDataSetChanged();
+                            } catch (SQLException e) {
+                                Log.e("error", e.getMessage());
+                            }
+                            return null;
+                        }
+                    };
+                    asyncTask.execute();
+
                 });
                 builder.setNegativeButton("No", (dialog, which) -> {
                     dialog.cancel();

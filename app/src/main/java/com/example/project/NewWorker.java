@@ -2,6 +2,8 @@ package com.example.project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class NewWorker extends AppCompatActivity {
+    String name;
+    String surname;
+    String email;
+    String password;
+    Double salary;
+    Boolean admin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,9 @@ public class NewWorker extends AppCompatActivity {
         TextView Salary = findViewById(R.id.EditTextSalary);
         CheckBox Admin = findViewById(R.id.AdminCheckBox);
         Button Save = findViewById(R.id.SaveButtonNewWorker);
+
+
+
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         imageView.startAnimation(animation);
@@ -61,72 +72,108 @@ public class NewWorker extends AppCompatActivity {
                 public void onClick(View v) {
 
                     Connection con = new ConnectionHelper().connectionclass();
-
-                    try {
-                        ResultSet resultSet = con.createStatement().executeQuery("SELECT * from info WHERE Email ='" + Email.getText().toString() + "'");
-                        if (resultSet.next()) {
-                            Snackbar.make(v, "Worker already exists", Snackbar.LENGTH_SHORT).show();
-                        }
-                        else {
-                            PreparedStatement ps = con.prepareStatement("INSERT INTO info(Name, Surname, Email, Password, Salary, Elevated) VALUES(?,?,?,?,?,?)");
-                            ps.setString(1, Name.getText().toString());
-                            ps.setString(2, Surname.getText().toString());
-                            ps.setString(3, Email.getText().toString());
-                            ps.setString(4, Password.getText().toString());
-                            ps.setString(5, Salary.getText().toString());
-                            ps.setBoolean(6, Admin.isChecked());
-                            ps.executeUpdate();
-                            PreparedStatement ps2 = con.prepareStatement("SELECT * from info where Email=?");
-                            ps2.setString(1, Email.getText().toString());
-                            ResultSet rs = ps2.executeQuery();
-                            if (rs.next()) {
-                                con.createStatement().executeUpdate("INSERT INTO currentweek VALUES(" + rs.getInt("ID") + ",0,0,0,0,0,0,0)");
-                                con.createStatement().executeUpdate("INSERT INTO NextWeek VALUES(" + rs.getInt("ID") + ",0,0,0,0,0,0,0,0)");
+                    @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            try {
+                                ResultSet resultSet = con.createStatement().executeQuery("SELECT * from info WHERE Email ='" + Email.getText().toString() + "'");
+                                if (resultSet.next()) {
+                                    Snackbar.make(v, "Worker already exists", Snackbar.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    PreparedStatement ps = con.prepareStatement("INSERT INTO info(Name, Surname, Email, Password, Salary, Elevated) VALUES(?,?,?,?,?,?)");
+                                    ps.setString(1, Name.getText().toString());
+                                    ps.setString(2, Surname.getText().toString());
+                                    ps.setString(3, Email.getText().toString());
+                                    ps.setString(4, Password.getText().toString());
+                                    ps.setString(5, Salary.getText().toString());
+                                    ps.setBoolean(6, Admin.isChecked());
+                                    ps.executeUpdate();
+                                    PreparedStatement ps2 = con.prepareStatement("SELECT * from info where Email=?");
+                                    ps2.setString(1, Email.getText().toString());
+                                    ResultSet rs = ps2.executeQuery();
+                                    if (rs.next()) {
+                                        con.createStatement().executeUpdate("INSERT INTO currentweek VALUES(" + rs.getInt("ID") + ",0,0,0,0,0,0,0)");
+                                        con.createStatement().executeUpdate("INSERT INTO NextWeek VALUES(" + rs.getInt("ID") + ",0,0,0,0,0,0,0,0)");
+                                    }
+                                    con.close();
+                                    Snackbar.make(v, "Worker added", Snackbar.LENGTH_SHORT).show();
+                                }
+                            } catch (SQLException e) {
+                                Log.e("error", e.getMessage());
                             }
-                            con.close();
-                            Snackbar.make(v, "Worker added", Snackbar.LENGTH_SHORT).show();
+                            return null;
                         }
-                    } catch (SQLException e) {
-                        Log.e("error", e.getMessage());
-                    }
+                    };
+                    asyncTask.execute();
+
                 }
             });
         }
         else {
-            Connection connection=new ConnectionHelper().connectionclass();
-            try {
-                ResultSet rs=connection.createStatement().executeQuery("SELECT * FROM info WHERE ID="+id);
-                while (rs.next()) {
-                    Name.setText(rs.getString("Name"));
-                    Surname.setText(rs.getString("Surname"));
-                    Email.setText(rs.getString("Email"));
-                    Password.setText(rs.getString("Password"));
-                    Salary.setText(rs.getString("Salary"));
-                    Admin.setChecked(rs.getBoolean("Elevated"));
-                }
-                connection.close();
-            } catch (SQLException e) {
-                Log.e("error", e.getMessage());
-            }
-            Save.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
+
                 @Override
-                public void onClick(View v) {
-                    Connection con = new ConnectionHelper().connectionclass();
+                protected Object doInBackground(Object[] objects) {
+                    Connection connection=new ConnectionHelper().connectionclass();
                     try {
-                        PreparedStatement ps = con.prepareStatement("UPDATE info SET Name=?, Surname=?, Email=?, Password=?, Salary=?, Admin=? WHERE ID=?");
-                        ps.setString(1, Name.getText().toString());
-                        ps.setString(2, Surname.getText().toString());
-                        ps.setString(3, Email.getText().toString());
-                        ps.setString(4, Password.getText().toString());
-                        ps.setString(5, Salary.getText().toString());
-                        ps.setBoolean(6, Admin.isChecked());
-                        ps.setInt(7, id);
-                        ps.executeUpdate();
-                        con.close();
-                        Snackbar.make(v, "Worker updated", Snackbar.LENGTH_SHORT).show();
+                        ResultSet rs=connection.createStatement().executeQuery("SELECT * FROM info WHERE ID="+id);
+                        while (rs.next()) {
+                             name = rs.getString("Name");
+                             surname = rs.getString("Surname");
+                             email = rs.getString("Email");
+                             password = rs.getString("Password");
+                             salary = rs.getDouble("Salary");
+                             admin = rs.getBoolean("Elevated");
+                        }
+                        connection.close();
                     } catch (SQLException e) {
                         Log.e("error", e.getMessage());
                     }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Object o) {
+                    Name.setText(name);
+                    Surname.setText(surname);
+                    Email.setText(email);
+                    Password.setText(password);
+                    Salary.setText(String.valueOf(salary));
+                    Admin.setChecked(admin);
+
+                    super.onPostExecute(o);
+                }
+            };
+            asyncTask.execute();
+
+            Save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
+
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            Connection con = new ConnectionHelper().connectionclass();
+                            try {
+                                PreparedStatement ps = con.prepareStatement("UPDATE info SET Name=?, Surname=?, Email=?, Password=?, Salary=?, Admin=? WHERE ID=?");
+                                ps.setString(1, Name.getText().toString());
+                                ps.setString(2, Surname.getText().toString());
+                                ps.setString(3, Email.getText().toString());
+                                ps.setString(4, Password.getText().toString());
+                                ps.setString(5, Salary.getText().toString());
+                                ps.setBoolean(6, Admin.isChecked());
+                                ps.setInt(7, id);
+                                ps.executeUpdate();
+                                con.close();
+                                Snackbar.make(v, "Worker updated", Snackbar.LENGTH_SHORT).show();
+                            } catch (SQLException e) {
+                                Log.e("error", e.getMessage());
+                            }
+                            return null;
+                        }
+                    };
+                    asyncTask.execute();
                 }
             });
 

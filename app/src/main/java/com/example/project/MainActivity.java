@@ -6,7 +6,9 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,10 +26,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 
 public class MainActivity extends AppCompatActivity {
-
+    InternetBroadcast broadcastReceiver = new InternetBroadcast();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(broadcastReceiver, filter);
         setContentView(R.layout.activity_main);
         TextView email = findViewById(R.id.EmailTextMainPage);
         TextView password = findViewById(R.id.PasswordTextMainPage);
@@ -86,5 +90,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(broadcastReceiver);
     }
 }

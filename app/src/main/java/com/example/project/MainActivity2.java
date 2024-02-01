@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,10 +19,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -61,13 +64,14 @@ public class MainActivity2 extends AppCompatActivity {
     private double earned = 0;
     private String name = "";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (sharedPreferences.getLong("LastUpdated",0)==0) {
-            AsyncTask asyncTask = new AsyncTask() {
+        if (sharedPreferences.getLong("LastUpdated", 0) == 0) {
+            @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
                 @Override
                 protected Object doInBackground(Object[] objects) {
                     try {
@@ -78,12 +82,13 @@ public class MainActivity2 extends AppCompatActivity {
                             Timestamp timestamp = resultSet.getTimestamp("LastUpdated");
                             editor.putLong("LastUpdated", timestamp.getTime());
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Log.e("error", e.getMessage());
                     }
                     return null;
                 }
             };
+            asyncTask.execute();
         }
         Intent intent = new Intent(this, BackgroundCheck.class);
         if (!BackgroundCheck.isServiceRunning()) {
@@ -95,13 +100,13 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         SharedPreferences sharedPreferences3 = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         int id = sharedPreferences3.getInt("id", 0);
-        if (id==0) {
+        if (id == 0) {
             Log.e("error", "id is 0");
             Intent intent1 = new Intent(MainActivity2.this, MainActivity.class);
             startActivity(intent1);
         }
         NotificationManager notificationManager3 = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager3.cancel("SLAY",1);
+        notificationManager3.cancel("SLAY", 1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.showOverflowMenu();
@@ -142,84 +147,101 @@ public class MainActivity2 extends AppCompatActivity {
 
         //initial setup for texts
         AlertDialog loading = loadingalert.showCustomDialog(MainActivity2.this);
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from currentweek Where workerid = ?");
-            preparedStatement.setInt(1, id);
-            ResultSet alldaysofwork = preparedStatement.executeQuery();
+        @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
 
-            if (alldaysofwork.next()) {
-                ArrayList<Boolean> days = new ArrayList<>();
-                days.add(alldaysofwork.getBoolean("Monday"));
-                days.add(alldaysofwork.getBoolean("Tuesday"));
-                days.add(alldaysofwork.getBoolean("Wednesday"));
-                days.add(alldaysofwork.getBoolean("Thursday"));
-                days.add(alldaysofwork.getBoolean("Friday"));
-                days.add(alldaysofwork.getBoolean("Saturday"));
-                days.add(alldaysofwork.getBoolean("Sunday"));
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                try {
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from currentweek Where workerid = ?");
+                    preparedStatement.setInt(1, id);
+                    ResultSet alldaysofwork = preparedStatement.executeQuery();
 
-                int currentDayOfWeek = LocalDate.now().getDayOfWeek().getValue();
+                    if (alldaysofwork.next()) {
+                        ArrayList<Boolean> days = new ArrayList<>();
+                        days.add(alldaysofwork.getBoolean("Monday"));
+                        days.add(alldaysofwork.getBoolean("Tuesday"));
+                        days.add(alldaysofwork.getBoolean("Wednesday"));
+                        days.add(alldaysofwork.getBoolean("Thursday"));
+                        days.add(alldaysofwork.getBoolean("Friday"));
+                        days.add(alldaysofwork.getBoolean("Saturday"));
+                        days.add(alldaysofwork.getBoolean("Sunday"));
 
-                Log.e("day", "Current Day of Week: " + currentDayOfWeek);
+                        int currentDayOfWeek = LocalDate.now().getDayOfWeek().getValue();
 
-                for (int i = 0; i < 7; i++) {
-                    int nextDayIndex = (currentDayOfWeek + i) % 7;
-                    if (days.get(nextDayIndex)) {
-                        String dayName = DayOfWeek.of(nextDayIndex + 1).name().substring(0, 1).toUpperCase() +
-                                DayOfWeek.of(nextDayIndex + 1).name().substring(1).toLowerCase();
-                        NextWorkday.setText(dayName);
-                        Log.e("day", "Found next workday: " + dayName);
-                        break;
-                    } else if (i == 6) {
-                        NextWorkday.setText("No more shifts this week");
-                        Log.e("day", "No more shifts this week");
+                        Log.e("day", "Current Day of Week: " + currentDayOfWeek);
+
+                        for (int i = 0; i < 7; i++) {
+                            int nextDayIndex = (currentDayOfWeek + i) % 7;
+                            if (days.get(nextDayIndex)) {
+                                String dayName = DayOfWeek.of(nextDayIndex + 1).name().substring(0, 1).toUpperCase() +
+                                        DayOfWeek.of(nextDayIndex + 1).name().substring(1).toLowerCase();
+                                NextWorkday.setText(dayName);
+                                Log.e("day", "Found next workday: " + dayName);
+                                break;
+                            } else if (i == 6) {
+                                NextWorkday.setText("No more shifts this week");
+                                Log.e("day", "No more shifts this week");
+                            }
+                        }
+                    } else {
+                        NextWorkday.setText("No shifts found for the given worker ID");
+                        Log.e("day", "No shifts found for the given worker ID");
                     }
-                }
-            } else {
-                NextWorkday.setText("No shifts found for the given worker ID");
-                Log.e("day", "No shifts found for the given worker ID");
-            }
 
-            connection.close();
-        } catch (SQLException e) {
-            Log.e("error with server", e.getMessage());
-        }
-        // time for main menu functional
-        Connection con = new ConnectionHelper().connectionclass();
-        try {
-            String q = "SELECT * from info WHERE ID=?";
-            PreparedStatement preps = con.prepareStatement(q);
-            preps.setInt(1, id);
-            ResultSet result = preps.executeQuery();
-            result.next();
-            Salary = result.getDouble("Salary");
-            WelcomeText.setText("Welcome, " + result.getString("Name"));
-            name = result.getString("Name") + "'s " + result.getString("Surname") + " information:";
-            hours = 0;
-            String query = "SELECT * FROM shifthistory WHERE WorkerID = ? AND StartTime >= ?";
-            LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            preparedStatement.setDate(2, java.sql.Date.valueOf(firstDayOfMonth.toString()));
-            ResultSet res = preparedStatement.executeQuery();
-            while (res.next()) {
-                Timestamp start = res.getTimestamp("StartTime");
-                Timestamp end = res.getTimestamp("EndTime");
-                long timeDifference = end.getTime() - start.getTime();
-                hours += (double) timeDifference / (1000 * 60 * 60);
+                    connection.close();
+                } catch (SQLException e) {
+                    Log.e("error with server", e.getMessage());
+                }
+                // time for main menu functional
+                Connection con = new ConnectionHelper().connectionclass();
+                try {
+                    String q = "SELECT * from info WHERE ID=?";
+                    PreparedStatement preps = con.prepareStatement(q);
+                    preps.setInt(1, id);
+                    ResultSet result = preps.executeQuery();
+                    result.next();
+                    Salary = result.getDouble("Salary");
+                    name = result.getString("Name");
+                    hours = 0;
+                    String query = "SELECT * FROM shifthistory WHERE WorkerID = ? AND StartTime >= ?";
+                    LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+                    PreparedStatement preparedStatement = con.prepareStatement(query);
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.setDate(2, java.sql.Date.valueOf(firstDayOfMonth.toString()));
+                    ResultSet res = preparedStatement.executeQuery();
+                    while (res.next()) {
+                        Timestamp start = res.getTimestamp("StartTime");
+                        Timestamp end = res.getTimestamp("EndTime");
+                        long timeDifference = end.getTime() - start.getTime();
+                        hours += (double) timeDifference / (1000 * 60 * 60);
+                    }
+                    DecimalFormat decimalFormat = new DecimalFormat("#.0");
+                    String formattedValue = decimalFormat.format(hours);
+                    hours = Double.parseDouble(formattedValue);
+                    earned = hours * Salary;
+                    name=result.getString("Name");
+                    formattedValue = decimalFormat.format(earned);
+                    earned = Double.parseDouble(formattedValue);
+                    con.close();
+                } catch (SQLException e) {
+                    Log.e("error while counting hours", e.getMessage());
+                }
+                return null;
             }
-            con.close();
-            DecimalFormat decimalFormat = new DecimalFormat("#.0");
-            String formattedValue = decimalFormat.format(hours);
-            hours = Double.parseDouble(formattedValue);
-            HoursText.setText(hours + " hours");
-            earned = hours * Salary;
-            SalaryText.setText(Salary + "₪");
-            formattedValue = decimalFormat.format(earned);
-            earned = Double.parseDouble(formattedValue);
-            EarnedText.setText(earned + "₪");
-        } catch (SQLException e) {
-            Log.e("error while counting hours", e.getMessage());
-        }
+            @Override
+            protected void onPostExecute(Object o) {
+                    WelcomeText.setText("Welcome, " + name);
+                    SalaryText.setText(Salary + "₪");
+                    EarnedText.setText(earned + "₪");
+                    HoursText.setText(hours + " hours");
+                    Log.i("hours", String.valueOf(hours));
+                    Log.i("earned", String.valueOf(earned));
+                    Log.i("salary", String.valueOf(Salary));
+                    Log.i("name", String.valueOf(name));
+            }
+        };
+        asyncTask.execute();
+
         //notif
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(MainActivity2.this, "CHANNEL_ID");
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
@@ -363,6 +385,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -384,7 +407,7 @@ public class MainActivity2 extends AppCompatActivity {
             finish();
             return super.onOptionsItemSelected(item);
         } else {
-            String string = name + "\nHours worked: " + hours + " hours" + "\nEarnings: " + earned + "₪" + "\nSalary: " + Salary + "₪/h";
+            String string = name+"'s information"+"\n" + "\nHours worked: " + hours + " hours" + "\nEarnings: " + earned + "₪" + "\nSalary: " + Salary + "₪/h";
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, string);

@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -24,45 +25,51 @@ public class BackgroundCheck extends Service {
     }
     private static boolean isRunning =false;
     @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.createNotificationChannel(new NotificationChannel("1", "1", NotificationManager.IMPORTANCE_HIGH));
-        Log.i("service", "service started");
+        Log.i("service", "checking for shifts update in background");
+        Notification notification = new Notification.Builder(getApplicationContext(), "1")
+                .setContentText("Service is running")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .build();
+
+        startForeground(1, notification);
 
         if (!isRunning) {
             isRunning = true;
 
-            Thread thread = new Thread(new Runnable() {
+            Handler handler = new Handler();
+            Runnable hand = new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Log.i("service", "thread started");
+                        Connection connection = new ConnectionHelper().connectionclass();
+                        ResultSet result = connection.createStatement().executeQuery("SELECT * FROM LastUpdated");
+                        result.next();
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                        while (isRunning) {
-                            Connection connection = new ConnectionHelper().connectionclass();
-                            ResultSet result = connection.createStatement().executeQuery("SELECT * FROM LastUpdated");
-                            result.next();
-                            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                            if (result.getTimestamp("LastUpdated").getTime() != sharedPreferences.getLong("LastUpdated", 0)) {
-                                editor.putLong("LastUpdated", result.getTimestamp("LastUpdated").getTime());
-                                editor.apply();
-                                notificationManager.notify(1, new Notification.Builder(getApplicationContext(), "1").setContentText("Shifts for next week are available").setSmallIcon(R.drawable.ic_launcher_foreground).build());
-                            }
-
-                            connection.close();
-                            Thread.sleep(300000);
+                        if (result.getTimestamp("LastUpdated").getTime() != sharedPreferences.getLong("LastUpdated", 0)) {
+                            editor.putLong("LastUpdated", result.getTimestamp("LastUpdated").getTime());
+                            editor.apply();
+                            notificationManager.notify(1, new Notification.Builder(getApplicationContext(), "1").setContentText("Shifts for next week are available").setSmallIcon(R.drawable.ic_launcher_foreground).build());
                         }
+
+                        connection.close();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    handler.postDelayed(this, 1000);
                 }
-            });
-
-            thread.start();
-        }
-
+            };
+            }
         return START_STICKY;
     }
 

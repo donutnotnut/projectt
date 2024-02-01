@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,24 +32,33 @@ public class AdminEditWorkersPage extends AppCompatActivity {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         NewWorkerButton.startAnimation(animation);
         recyclerView.startAnimation(animation);
+        @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                Connection con = new ConnectionHelper().connectionclass();
+                try {
+                    ResultSet result = con.createStatement().executeQuery("SELECT * FROM info");
+                    while (result.next()) {
+                        array.add(new WorkerItem(result.getInt("ID"), result.getString("Name") + " " + result.getString("Surname")));
 
-        //setup adapter and recycler
-        Connection con = new ConnectionHelper().connectionclass();
-        try {
-            ResultSet result = con.createStatement().executeQuery("SELECT * FROM info");
-            while (result.next()) {
-                array.add(new WorkerItem( result.getInt("ID"), result.getString("Name")+" "+result.getString("Surname")));
+                    }
+                    con.close();
+                } catch (SQLException e) {
+                    Log.e("error", e.getMessage());
+                }
+                AdapterForAdminWorkers adapterForAdminWorkers = new AdapterForAdminWorkers(AdminEditWorkersPage.this, array);
 
+                return adapterForAdminWorkers;
             }
-            con.close();
-        } catch (SQLException e) {
-            Log.e("error", e.getMessage());
-        }
-        AdapterForAdminWorkers adapterForAdminWorkers = new AdapterForAdminWorkers(this, array);
-        recyclerView.setAdapter(adapterForAdminWorkers);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
+                @Override
+                protected void onPostExecute(Object o) {
+                    recyclerView.setAdapter((RecyclerView.Adapter)o);
+                    LinearLayoutManager llm = new LinearLayoutManager(AdminEditWorkersPage.this);
+                    llm.setOrientation(LinearLayoutManager.VERTICAL);
+                    recyclerView.setLayoutManager(llm);
+                }
+        };
+        asyncTask.execute();
         NewWorkerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

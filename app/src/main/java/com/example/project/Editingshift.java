@@ -2,9 +2,11 @@ package com.example.project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -142,25 +144,34 @@ public class Editingshift extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Connection con = new ConnectionHelper().connectionclass();
-                String sql = "UPDATE shifthistory " + "SET StartTime = ?, EndTime = ? " + "WHERE ShiftID = ?";
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.nnnnnnnnn]");
-                String StringStartTime = StartLocalDate.format(formatter);
-                String StringEndTime = EndLocalDate.format(formatter);
-                Timestamp startTime = Timestamp.valueOf(StringStartTime);
-                Timestamp endTime = Timestamp.valueOf(StringEndTime);
-                try {
-                    PreparedStatement pstmt = con.prepareStatement(sql);
-                    pstmt.setTimestamp(1, startTime);
-                    pstmt.setTimestamp(2, endTime);
-                    pstmt.setInt(3, ShiftId);
-                    pstmt.executeUpdate();
-                    con.close();
-                    Snackbar.make(findViewById(android.R.id.content), "Shift Updated", Snackbar.LENGTH_LONG).show();
-                }
-                catch (Exception e){
-                    Log.e("error", e.getMessage());
-                }
+                @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
+
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        Connection con = new ConnectionHelper().connectionclass();
+                        String sql = "UPDATE shifthistory " + "SET StartTime = ?, EndTime = ? " + "WHERE ShiftID = ?";
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.nnnnnnnnn]");
+                        String StringStartTime = StartLocalDate.format(formatter);
+                        String StringEndTime = EndLocalDate.format(formatter);
+                        Timestamp startTime = Timestamp.valueOf(StringStartTime);
+                        Timestamp endTime = Timestamp.valueOf(StringEndTime);
+                        try {
+                            PreparedStatement pstmt = con.prepareStatement(sql);
+                            pstmt.setTimestamp(1, startTime);
+                            pstmt.setTimestamp(2, endTime);
+                            pstmt.setInt(3, ShiftId);
+                            pstmt.executeUpdate();
+                            con.close();
+                            Snackbar.make(findViewById(android.R.id.content), "Shift Updated", Snackbar.LENGTH_LONG).show();
+                        }
+                        catch (Exception e){
+                            Log.e("error", e.getMessage());
+                        }
+                        return null;
+                    }
+                };
+                asyncTask.execute();
+
 
             }
         });

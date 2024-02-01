@@ -2,16 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Add INTERNET permission here -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="WorkTimeTracker"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
@@ -19,12 +24,6 @@
         tools:targetApi="31">
         <activity
             android:name=".NextWeekAdmin"
-            android:exported="false" />
-        <activity
-            android:name=".currentweekactivity"
-            android:exported="false" />
-        <activity
-            android:name=".CurrentWeekSchedule"
             android:exported="false" />
         <activity
             android:name=".SelectNextWeekShifts"
@@ -63,7 +62,10 @@
             </intent-filter>
         </activity>
         <service android:name=".BackgroundCheck"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service android:name=".InternetChecker">
+        </service>
 
         <meta-data
             android:name="preloaded_fonts"
