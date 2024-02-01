@@ -247,7 +247,6 @@ public class MainActivity2 extends AppCompatActivity {
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
         notifBuilder.setCustomContentView(remoteViews);
         notifBuilder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-        notifBuilder.setSmallIcon(R.drawable.ic_launcher_background);
         notifBuilder.setColorized(true);
         notifBuilder.setOngoing(true);
         notifBuilder.setSilent(true);
