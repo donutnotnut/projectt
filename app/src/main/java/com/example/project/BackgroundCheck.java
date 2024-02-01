@@ -60,7 +60,6 @@ public class BackgroundCheck extends Service {
                             editor.apply();
                             notificationManager.notify(1, new Notification.Builder(getApplicationContext(), "1").setContentText("Shifts for next week are available").setSmallIcon(R.drawable.ic_launcher_foreground).build());
                         }
-
                         connection.close();
 
                     } catch (Exception e) {
@@ -69,6 +68,7 @@ public class BackgroundCheck extends Service {
                     handler.postDelayed(this, 1000);
                 }
             };
+            handler.postDelayed(hand,100);
             }
         return START_STICKY;
     }

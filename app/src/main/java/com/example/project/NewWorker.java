@@ -40,6 +40,7 @@ public class NewWorker extends AppCompatActivity {
         TextView textView14 = findViewById(R.id.textView14);
         TextView textView15 = findViewById(R.id.textView15);
         TextView textView16 = findViewById(R.id.textView16);
+        TextView welcome = findViewById(R.id.textView10);
         TextView Name = findViewById(R.id.EditTextName);
         TextView Surname = findViewById(R.id.EditTextSurname);
         TextView Email = findViewById(R.id.editTextTextEmailAddress);
@@ -111,6 +112,8 @@ public class NewWorker extends AppCompatActivity {
             });
         }
         else {
+            welcome.setText("Edit Worker");
+
             @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
 
                 @Override

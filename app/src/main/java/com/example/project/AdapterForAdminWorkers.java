@@ -71,11 +71,16 @@ public class AdapterForAdminWorkers extends RecyclerView.Adapter<AdapterForAdmin
                                 ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
                                 ps.execute();
                                 array.remove(holder.getAdapterPosition());
-                                notifyDataSetChanged();
+
                             } catch (SQLException e) {
                                 Log.e("error", e.getMessage());
                             }
                             return null;
+                        }
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            super.onPostExecute(o);
+                            notifyDataSetChanged();
                         }
                     };
                     asyncTask.execute();
