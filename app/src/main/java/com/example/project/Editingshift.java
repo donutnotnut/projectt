@@ -161,7 +161,6 @@ public class Editingshift extends AppCompatActivity {
                             pstmt.setTimestamp(2, endTime);
                             pstmt.setInt(3, ShiftId);
                             pstmt.executeUpdate();
-                            con.close();
                             Snackbar.make(findViewById(android.R.id.content), "Shift Updated", Snackbar.LENGTH_LONG).show();
                         }
                         catch (Exception e){

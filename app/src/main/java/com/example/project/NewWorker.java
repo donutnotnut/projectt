@@ -97,7 +97,7 @@ public class NewWorker extends AppCompatActivity {
                                         con.createStatement().executeUpdate("INSERT INTO currentweek VALUES(" + rs.getInt("ID") + ",0,0,0,0,0,0,0)");
                                         con.createStatement().executeUpdate("INSERT INTO NextWeek VALUES(" + rs.getInt("ID") + ",0,0,0,0,0,0,0,0)");
                                     }
-                                    con.close();
+
                                     Snackbar.make(v, "Worker added", Snackbar.LENGTH_SHORT).show();
                                 }
                             } catch (SQLException e) {
@@ -129,7 +129,7 @@ public class NewWorker extends AppCompatActivity {
                              salary = rs.getDouble("Salary");
                              admin = rs.getBoolean("Elevated");
                         }
-                        connection.close();
+
                     } catch (SQLException e) {
                         Log.e("error", e.getMessage());
                     }
@@ -168,7 +168,6 @@ public class NewWorker extends AppCompatActivity {
                                 ps.setBoolean(6, Admin.isChecked());
                                 ps.setInt(7, id);
                                 ps.executeUpdate();
-                                con.close();
                                 Snackbar.make(v, "Worker updated", Snackbar.LENGTH_SHORT).show();
                             } catch (SQLException e) {
                                 Log.e("error", e.getMessage());

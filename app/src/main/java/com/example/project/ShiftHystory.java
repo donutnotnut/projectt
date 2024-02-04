@@ -49,7 +49,6 @@ public class ShiftHystory extends AppCompatActivity {
             }
         });
         tabLayout.setSelectedItemId(R.id.HistoryItem);
-        AlertDialog loading = loadingalert.showCustomDialog(this);
         Connection con = new ConnectionHelper().connectionclass();
         try {
             ResultSet result = con.createStatement().executeQuery("SELECT * FROM shifthistory WHERE WorkerId = '" + id+"'");
@@ -60,9 +59,7 @@ public class ShiftHystory extends AppCompatActivity {
                 String startString = simpleDateFormat.format(start);
                 String endString = simpleDateFormat.format(end);
                 shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID"), start, end, ""));
-                con.close();
             }
-            loading.dismiss();
         } catch (SQLException e) {
             Log.e("error", e.getMessage());
         }
@@ -87,6 +84,5 @@ public class ShiftHystory extends AppCompatActivity {
                 return false;
             }
         });
-        loading.dismiss();
     }
 }

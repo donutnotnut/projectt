@@ -107,7 +107,6 @@ public class SelectNextWeekShifts extends AppCompatActivity {
             ResultSet rs = ps.executeQuery();
             rs.next();
             name = rs.getString("Name");
-            com.close();
         }catch (SQLException e) {
             Log.e("error", e.getMessage());
         }
@@ -153,7 +152,6 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                         arrayforadapter.add(new workdayitem(day, (ArrayList<String>) names.clone()));
                     }
                 }
-                con.close();
             }
 
         } catch (SQLException e) {
@@ -215,7 +213,6 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                                         preparedStatement.executeUpdate();
                                         SetterCheckBox(array);
                                         Warning.setVisibility(View.VISIBLE);
-                                        connection.close();
                                     }
                                     catch (SQLException e) {
                                         Log.e("error", e.getMessage());

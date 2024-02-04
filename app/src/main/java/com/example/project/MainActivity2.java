@@ -146,7 +146,6 @@ public class MainActivity2 extends AppCompatActivity {
         SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         //initial setup for texts
-        AlertDialog loading = loadingalert.showCustomDialog(MainActivity2.this);
         @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
 
             @Override
@@ -188,7 +187,6 @@ public class MainActivity2 extends AppCompatActivity {
                         Log.e("day", "No shifts found for the given worker ID");
                     }
 
-                    connection.close();
                 } catch (SQLException e) {
                     Log.e("error with server", e.getMessage());
                 }
@@ -222,7 +220,6 @@ public class MainActivity2 extends AppCompatActivity {
                     name=result.getString("Name");
                     formattedValue = decimalFormat.format(earned);
                     earned = Double.parseDouble(formattedValue);
-                    con.close();
                 } catch (SQLException e) {
                     Log.e("error while counting hours", e.getMessage());
                 }
@@ -251,6 +248,7 @@ public class MainActivity2 extends AppCompatActivity {
         notifBuilder.setOngoing(true);
         notifBuilder.setSilent(true);
         notifBuilder.setColor(ContextCompat.getColor(MainActivity2.this, R.color.accent_dark));
+        notifBuilder.setSmallIcon(R.drawable.ic_launcher_foreground);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity2.this);
         notificationManager.createNotificationChannel(new NotificationChannel("CHANNEL_ID", "CHANNEL_NAME", NotificationManager.IMPORTANCE_HIGH));
         Handler handler = new Handler(Looper.getMainLooper());
@@ -298,7 +296,6 @@ public class MainActivity2 extends AppCompatActivity {
                     v.setBackgroundTintList(ContextCompat.getColorStateList(MainActivity2.this, R.color.accent));
                     Button btn = (Button) v;
                     btn.setText("Start Shift");
-                    loading.show();
                     ConnectionHelper connectionHelper = new ConnectionHelper();
                     Connection connection = connectionHelper.connectionclass();
                     String insertSQL = "INSERT INTO shifthistory (WorkerID, StartTime, EndTime) VALUES (?, ?, ?)";
@@ -307,12 +304,10 @@ public class MainActivity2 extends AppCompatActivity {
                         preparedStatement.setTimestamp(2, Timestamp.valueOf(startShift.toString()));
                         preparedStatement.setTimestamp(3, Timestamp.valueOf(endShift.toString()));
                         preparedStatement.executeUpdate();
-                        connection.close();
                     } catch (SQLException e) {
                         Log.e("error while pushing", e.getMessage());
 
                     }
-                    loading.dismiss();
                     startShift=null;
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity2.this);
                     notificationManager.cancel(1);
@@ -346,13 +341,12 @@ public class MainActivity2 extends AppCompatActivity {
         });
         Log.e("email", sharedPreferences.getString("email", null) + "");
         if (sharedPreferences.getString("email", null) == null) {
-            loading.show();
             Connection connectionclass = new ConnectionHelper().connectionclass();
             try {
 
                 ResultSet result = connectionclass.createStatement().executeQuery("SELECT * FROM info WHERE ID = " + id);
                 result.next();
-                loading.dismiss();
+
                 String email = result.getString("Email");
                 String password = result.getString("Password");
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity2.this);
@@ -370,7 +364,6 @@ public class MainActivity2 extends AppCompatActivity {
                 });
                 builder.setNegativeButton("No", null);
                 builder.show();
-                connectionclass.close();
 
             } catch (SQLException e) {
                 Log.e("error with server", e.getMessage());
@@ -380,7 +373,6 @@ public class MainActivity2 extends AppCompatActivity {
             startShift = new Timestamp(sharedPreferences2.getLong("startShift",0));
             StartShift.performClick();
         }
-        loading.dismiss();
 
     }
 

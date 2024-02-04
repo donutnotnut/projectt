@@ -15,22 +15,26 @@ public class ConnectionHelper {
     private static final String uname = "uhsnrjgwdiqnzjur";
     private static final String pass = "Ir3Qdnt4Kys0d5Cg0SJ8";
     private static final String port = "3306";
+    private static Connection conn = null;
 
     public Connection connectionclass() {
-        Connection connection = null;
         String connectionUrl = "jdbc:mysql://" + ip + ":" + port + "/" + database;
+        if (conn != null) {
+            return conn;
+        }
+        else {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-
-            connection = DriverManager.getConnection(connectionUrl, uname, pass);
-        } catch (SQLException | ClassNotFoundException ex) {
-            Log.e("error", ex.getMessage());
-            ex.printStackTrace();
+                conn = DriverManager.getConnection(connectionUrl, uname, pass);
+            } catch (SQLException | ClassNotFoundException ex) {
+                Log.e("error", ex.getMessage());
+                ex.printStackTrace();
+            }
         }
 
-        return connection;
+        return conn;
     }
 }

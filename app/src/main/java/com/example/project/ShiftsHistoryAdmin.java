@@ -37,7 +37,6 @@ public class ShiftsHistoryAdmin extends AppCompatActivity {
                 String startString = simpleDateFormat.format(start);
                 String endString = simpleDateFormat.format(end);
                 array.add(new ShiftObject(startString, endString, result.getInt("WorkerId"), result.getInt("ShiftID"), start, end, names.getString("Name")+ " "+names.getString("Surname")));
-                connection.close();
             }
         }
         catch (Exception e){

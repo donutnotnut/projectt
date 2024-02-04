@@ -59,7 +59,6 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
                     PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM shifthistory WHERE ShiftID = ?");
                     preparedStatement.setInt(1, array.get(holder.getAdapterPosition()).getShiftId());
                     preparedStatement.executeUpdate();
-                    connection.close();
                     array.remove(holder.getAdapterPosition());
                     notifyDataSetChanged();
                 } catch (SQLException e) {

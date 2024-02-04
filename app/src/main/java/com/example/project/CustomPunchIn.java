@@ -139,7 +139,6 @@ public class CustomPunchIn extends AppCompatActivity {
                             preparedStatement.setTimestamp(2, new Timestamp(PunchInTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
                             preparedStatement.setTimestamp(3, new Timestamp(PunchOutTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
                             preparedStatement.executeUpdate();
-                            connection.close();
                             AlertDialog.Builder builder = new AlertDialog.Builder(CustomPunchIn.this).setTitle("Added succesfully").setMessage("Shift saved");
                             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override

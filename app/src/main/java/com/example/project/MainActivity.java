@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    AlertDialog dialog = new loadingalert().showCustomDialog(MainActivity.this);
                     Connection connection = new ConnectionHelper().connectionclass();
                     ResultSet result = connection.createStatement().executeQuery("SELECT * FROM info WHERE Email = '" + email.getText().toString() + "'");
                     if (!result.next()){
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (result.getString("Password").equals(password.getText().toString())) {
                         int id=result.getInt("ID");
-                        connection.close();
 
                         if (!AdminSwitch.isChecked()) {
                             Intent intent = new Intent(MainActivity.this, MainActivity2.class);
@@ -83,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
                     else {
                         Snackbar.make(v, "Wrong password", Snackbar.LENGTH_SHORT).show();
                     }
-                    dialog.dismiss();
                 }
                 catch (Exception e){
                     Log.e("error",e.getMessage());

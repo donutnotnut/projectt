@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:padding="10dp"
         android:text="TextView"
-        android:textColor="@color/accent_dark"
+        android:textColor="@color/accent"
         android:textSize="20sp" />
 
 </LinearLayout>

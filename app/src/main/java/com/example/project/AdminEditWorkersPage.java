@@ -42,7 +42,6 @@ public class AdminEditWorkersPage extends AppCompatActivity {
                         array.add(new WorkerItem(result.getInt("ID"), result.getString("Name") + " " + result.getString("Surname")));
 
                     }
-                    con.close();
                 } catch (SQLException e) {
                     Log.e("error", e.getMessage());
                 }
