@@ -32,6 +32,7 @@ public class ConnectionHelper {
             } catch (SQLException | ClassNotFoundException ex) {
                 Log.e("error", ex.getMessage());
                 ex.printStackTrace();
+
             }
         }
 
