@@ -139,22 +139,26 @@ public class CustomPunchIn extends AppCompatActivity {
                             preparedStatement.setTimestamp(2, new Timestamp(PunchInTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
                             preparedStatement.setTimestamp(3, new Timestamp(PunchOutTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
                             preparedStatement.executeUpdate();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(CustomPunchIn.this).setTitle("Added succesfully").setMessage("Shift saved");
-                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    Intent intent = new Intent(CustomPunchIn.this, MainActivity2.class);
-                                    intent.putExtra("id", id);
-                                    startActivity(intent);
-                                }
-                            });
-                            AlertDialog alert=builder.create();
-                            alert.show();
+
+
 
                         } catch (SQLException e) {
                             Log.e("error while pushing", e.getMessage());
                         }
                         return null;
+                    }
+                    public void onPostExecute(Object o){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CustomPunchIn.this).setTitle("Added succesfully").setMessage("Shift saved");
+                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                Intent intent = new Intent(CustomPunchIn.this, MainActivity2.class);
+                                intent.putExtra("id", id);
+                                startActivity(intent);
+                            }
+                        });
+                        AlertDialog alert=builder.create();
+                        alert.show();
                     }
                 };
                 asyncTask.execute();

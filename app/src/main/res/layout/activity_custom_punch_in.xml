@@ -79,30 +79,33 @@
 
     <Button
         android:id="@+id/SaveCustomPunchIn"
-        android:layout_width="190dp"
-        android:layout_height="58dp"
+        android:layout_width="166dp"
+        android:layout_height="52dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="@color/accent"
         android:text="Save"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.036"
+        app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.963" />
 
     <Button
         android:id="@+id/CancelCustomPunchIn"
-        android:layout_width="190dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="163dp"
+        android:layout_height="56dp"
         android:background="@drawable/buttonsbackground"
         android:backgroundTint="#F89595"
         android:text="Cancel"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/SaveCustomPunchIn"
-        app:layout_constraintTop_toTopOf="@+id/SaveCustomPunchIn" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.927"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/SaveCustomPunchIn"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"

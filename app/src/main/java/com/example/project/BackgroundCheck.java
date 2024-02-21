@@ -48,7 +48,6 @@ public class BackgroundCheck extends Service {
                 @Override
                 public void run() {
                     try {
-                        Log.i("service", "thread started");
                         Connection connection = new ConnectionHelper().connectionclass();
                         ResultSet result = connection.createStatement().executeQuery("SELECT * FROM LastUpdated");
                         result.next();
