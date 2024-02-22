@@ -100,7 +100,7 @@ public class NewWorker extends AppCompatActivity {
 
                                     Snackbar.make(v, "Worker added", Snackbar.LENGTH_SHORT).show();
                                 }
-                            } catch (SQLException e) {
+                            } catch (Exception e) {
                                 Log.e("error", e.getMessage());
                             }
                             return null;
@@ -130,7 +130,7 @@ public class NewWorker extends AppCompatActivity {
                              admin = rs.getBoolean("Elevated");
                         }
 
-                    } catch (SQLException e) {
+                    } catch (Exception e) {
                         Log.e("error", e.getMessage());
                     }
                     return null;
@@ -169,7 +169,7 @@ public class NewWorker extends AppCompatActivity {
                                 ps.setInt(7, id);
                                 ps.executeUpdate();
                                 Snackbar.make(v, "Worker updated", Snackbar.LENGTH_SHORT).show();
-                            } catch (SQLException e) {
+                            } catch (Exception e) {
                                 Log.e("error", e.getMessage());
                             }
                             return null;

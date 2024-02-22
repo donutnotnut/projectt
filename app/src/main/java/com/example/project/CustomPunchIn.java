@@ -142,7 +142,7 @@ public class CustomPunchIn extends AppCompatActivity {
 
 
 
-                        } catch (SQLException e) {
+                        } catch (Exception e) {
                             Log.e("error while pushing", e.getMessage());
                         }
                         return null;

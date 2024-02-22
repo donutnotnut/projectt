@@ -187,7 +187,7 @@ public class MainActivity2 extends AppCompatActivity {
                         Log.e("day", "No shifts found for the given worker ID");
                     }
 
-                } catch (SQLException e) {
+                } catch (Exception e) {
                     Log.e("error with server", e.getMessage());
                 }
                 // time for main menu functional
@@ -220,7 +220,7 @@ public class MainActivity2 extends AppCompatActivity {
                     name=result.getString("Name");
                     formattedValue = decimalFormat.format(earned);
                     earned = Double.parseDouble(formattedValue);
-                } catch (SQLException e) {
+                } catch (Exception e) {
                     Log.e("error while counting hours", e.getMessage());
                 }
                 return null;
@@ -304,7 +304,7 @@ public class MainActivity2 extends AppCompatActivity {
                         preparedStatement.setTimestamp(2, Timestamp.valueOf(startShift.toString()));
                         preparedStatement.setTimestamp(3, Timestamp.valueOf(endShift.toString()));
                         preparedStatement.executeUpdate();
-                    } catch (SQLException e) {
+                    } catch (Exception e) {
                         Log.e("error while pushing", e.getMessage());
 
                     }
@@ -365,7 +365,7 @@ public class MainActivity2 extends AppCompatActivity {
                 builder.setNegativeButton("No", null);
                 builder.show();
 
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 Log.e("error with server", e.getMessage());
             }
         }

@@ -72,7 +72,7 @@ public class AdapterForAdminWorkers extends RecyclerView.Adapter<AdapterForAdmin
                                 ps.execute();
                                 array.remove(holder.getAdapterPosition());
 
-                            } catch (SQLException e) {
+                            } catch (Exception e) {
                                 Log.e("error", e.getMessage());
                             }
                             return null;

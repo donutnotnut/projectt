@@ -107,7 +107,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
             ResultSet rs = ps.executeQuery();
             rs.next();
             name = rs.getString("Name");
-        }catch (SQLException e) {
+        }catch (Exception e) {
             Log.e("error", e.getMessage());
         }
 
@@ -154,7 +154,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                 }
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -214,7 +214,7 @@ public class SelectNextWeekShifts extends AppCompatActivity {
                                         SetterCheckBox(array);
                                         Warning.setVisibility(View.VISIBLE);
                                     }
-                                    catch (SQLException e) {
+                                    catch (Exception e) {
                                         Log.e("error", e.getMessage());
                                     }
                                 }

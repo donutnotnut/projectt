@@ -61,7 +61,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
                     preparedStatement.executeUpdate();
                     array.remove(holder.getAdapterPosition());
                     notifyDataSetChanged();
-                } catch (SQLException e) {
+                } catch (Exception e) {
                     Log.e("error while deleting", e.getMessage());
                 }
             }

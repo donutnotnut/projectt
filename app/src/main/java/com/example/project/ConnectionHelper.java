@@ -29,7 +29,7 @@ public class ConnectionHelper {
                 StrictMode.setThreadPolicy(policy);
 
                 conn = DriverManager.getConnection(connectionUrl, uname, pass);
-            } catch (SQLException | ClassNotFoundException ex) {
+            } catch (Exception ex) {
                 Log.e("error", ex.getMessage());
                 ex.printStackTrace();
 
