@@ -30,15 +30,6 @@ public class BackgroundCheck extends Service {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.createNotificationChannel(new NotificationChannel("1", "1", NotificationManager.IMPORTANCE_HIGH));
-        Log.i("service", "checking for shifts update in background");
-        Notification notification = new Notification.Builder(getApplicationContext(), "1")
-                .setContentText("Service is running")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .build();
-
-        startForeground(1, notification);
 
         if (!isRunning) {
             isRunning = true;
@@ -57,6 +48,7 @@ public class BackgroundCheck extends Service {
                         if (result.getTimestamp("LastUpdated").getTime() != sharedPreferences.getLong("LastUpdated", 0)) {
                             editor.putLong("LastUpdated", result.getTimestamp("LastUpdated").getTime());
                             editor.apply();
+                            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                             notificationManager.notify(1, new Notification.Builder(getApplicationContext(), "1").setContentText("Shifts for next week are available").setSmallIcon(R.drawable.ic_launcher_foreground).build());
                         }
 
