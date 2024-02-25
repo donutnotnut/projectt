@@ -25,6 +25,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ShiftHystory extends AppCompatActivity {
     private int id = 0;
@@ -53,12 +54,18 @@ public class ShiftHystory extends AppCompatActivity {
         try {
             ResultSet result = con.createStatement().executeQuery("SELECT * FROM shifthistory WHERE WorkerId = '" + id+"'");
             while (result.next()) {
-                Timestamp start = result.getTimestamp("StartTime");
-                Timestamp end = result.getTimestamp("EndTime");
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd HH:mm");
-                String startString = simpleDateFormat.format(start);
-                String endString = simpleDateFormat.format(end);
-                shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID"), start, end, ""));
+                Calendar currentCalendar = Calendar.getInstance();
+                Calendar date = Calendar.getInstance();
+                date.setTime(result.getTimestamp("StartTime"));
+                if (date.get(Calendar.MONTH) == currentCalendar.get(Calendar.MONTH)) {
+                    Timestamp start = result.getTimestamp("StartTime");
+                    Timestamp end = result.getTimestamp("EndTime");
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd HH:mm");
+                    String startString = simpleDateFormat.format(start);
+                    String endString = simpleDateFormat.format(end);
+                    // Assuming id is defined elsewhere
+                    shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID"), start, end, ""));
+                }
             }
         } catch (Exception e) {
             Log.e("error", e.getMessage());

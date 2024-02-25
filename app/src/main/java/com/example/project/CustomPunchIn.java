@@ -67,7 +67,7 @@ public class CustomPunchIn extends AppCompatActivity {
         DatePickerDialog datePickerDialogPunchIn= new DatePickerDialog(CustomPunchIn.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                PunchInTime=PunchInTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
+                PunchInTime=PunchInTime.withYear(year).withMonth(month+1).withDayOfMonth(dayOfMonth);
                 PunchInDateButton.setText(PunchInTime.getYear()+"/"+PunchInTime.getMonthValue()+"/"+PunchInTime.getDayOfMonth());
             }
         },PunchInTime.getYear(),PunchInTime.getMonthValue()-1,PunchInTime.getDayOfMonth());
@@ -75,7 +75,7 @@ public class CustomPunchIn extends AppCompatActivity {
         DatePickerDialog datePickerDialogPunchOut= new DatePickerDialog(CustomPunchIn.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                PunchOutTime=PunchOutTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
+                PunchOutTime=PunchOutTime.withYear(year).withMonth(month+1).withDayOfMonth(dayOfMonth);
                 PunchOutDateButton.setText(PunchOutTime.getYear()+"/"+PunchOutTime.getMonthValue()+"/"+PunchOutTime.getDayOfMonth());
             }
         },PunchOutTime.getYear(),PunchOutTime.getMonthValue()-1,PunchOutTime.getDayOfMonth());
