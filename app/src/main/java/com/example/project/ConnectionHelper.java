@@ -20,7 +20,14 @@ public class ConnectionHelper {
     public Connection connectionclass() {
         String connectionUrl = "jdbc:mysql://" + ip + ":" + port + "/" + database;
         if (conn != null) {
-            return conn;
+            try {
+                if (!conn.isClosed()) {
+                    return conn;
+                }
+            }
+            catch (SQLException e) {
+                Log.e("error", e.getMessage());
+            }
         }
         else {
             try {

@@ -148,7 +148,6 @@ public class Editingshift extends AppCompatActivity {
 
                     @Override
                     protected Object doInBackground(Object[] objects) {
-                        Connection con = new ConnectionHelper().connectionclass();
                         String sql = "UPDATE shifthistory " + "SET StartTime = ?, EndTime = ? " + "WHERE ShiftID = ?";
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.nnnnnnnnn]");
                         String StringStartTime = StartLocalDate.format(formatter);
@@ -156,6 +155,7 @@ public class Editingshift extends AppCompatActivity {
                         Timestamp startTime = Timestamp.valueOf(StringStartTime);
                         Timestamp endTime = Timestamp.valueOf(StringEndTime);
                         try {
+                            Connection con = new ConnectionHelper().connectionclass();
                             PreparedStatement pstmt = con.prepareStatement(sql);
                             pstmt.setTimestamp(1, startTime);
                             pstmt.setTimestamp(2, endTime);

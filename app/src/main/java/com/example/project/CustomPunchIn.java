@@ -132,9 +132,10 @@ public class CustomPunchIn extends AppCompatActivity {
                 @SuppressLint("StaticFieldLeak") AsyncTask asyncTask= new AsyncTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
-                        Connection connection= new ConnectionHelper().connectionclass();
                         String insertSQL = "INSERT INTO shifthistory (WorkerID, StartTime, EndTime) VALUES (?, ?, ?)";
-                        try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+                        try {
+                            Connection connection= new ConnectionHelper().connectionclass();
+                            PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
                             preparedStatement.setInt(1, id); // Replace with the actual ID value
                             preparedStatement.setTimestamp(2, new Timestamp(PunchInTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
                             preparedStatement.setTimestamp(3, new Timestamp(PunchOutTime.toInstant(ZoneOffset.UTC).toEpochMilli()));

@@ -191,8 +191,9 @@ public class MainActivity2 extends AppCompatActivity {
                     Log.e("error with server", e.getMessage());
                 }
                 // time for main menu functional
-                Connection con = new ConnectionHelper().connectionclass();
+
                 try {
+                    Connection con = new ConnectionHelper().connectionclass();
                     String q = "SELECT * from info WHERE ID=?";
                     PreparedStatement preps = con.prepareStatement(q);
                     preps.setInt(1, id);
@@ -297,9 +298,10 @@ public class MainActivity2 extends AppCompatActivity {
                     Button btn = (Button) v;
                     btn.setText("Start Shift");
                     ConnectionHelper connectionHelper = new ConnectionHelper();
-                    Connection connection = connectionHelper.connectionclass();
                     String insertSQL = "INSERT INTO shifthistory (WorkerID, StartTime, EndTime) VALUES (?, ?, ?)";
-                    try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+                    try {
+                        Connection connection = connectionHelper.connectionclass();
+                        PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
                         preparedStatement.setInt(1, id);
                         preparedStatement.setTimestamp(2, Timestamp.valueOf(startShift.toString()));
                         preparedStatement.setTimestamp(3, Timestamp.valueOf(endShift.toString()));

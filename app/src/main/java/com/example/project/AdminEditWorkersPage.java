@@ -35,8 +35,8 @@ public class AdminEditWorkersPage extends AppCompatActivity {
         @SuppressLint("StaticFieldLeak") AsyncTask asyncTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
-                Connection con = new ConnectionHelper().connectionclass();
                 try {
+                    Connection con = new ConnectionHelper().connectionclass();
                     ResultSet result = con.createStatement().executeQuery("SELECT * FROM info");
                     while (result.next()) {
                         array.add(new WorkerItem(result.getInt("ID"), result.getString("Name") + " " + result.getString("Surname")));

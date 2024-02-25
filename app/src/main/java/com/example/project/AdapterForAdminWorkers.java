@@ -59,8 +59,8 @@ public class AdapterForAdminWorkers extends RecyclerView.Adapter<AdapterForAdmin
 
                         @Override
                         protected Object doInBackground(Object[] objects) {
-                            Connection con = new ConnectionHelper().connectionclass();
                             try {
+                                Connection con = new ConnectionHelper().connectionclass();
                                 PreparedStatement ps = con.prepareStatement("DELETE FROM info WHERE ID=?");
                                 ps.setInt(1, array.get(holder.getAdapterPosition()).getId());
                                 ps.execute();
