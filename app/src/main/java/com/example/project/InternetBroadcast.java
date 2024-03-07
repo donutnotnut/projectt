@@ -6,9 +6,16 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-
+/**
+ * Broadcast receiver to monitor internet connectivity changes.
+ */
 public class InternetBroadcast extends BroadcastReceiver {
 
+    /**
+     * Method triggered when network connectivity changes.
+     * @param context The application context.
+     * @param intent The intent indicating the change in network connectivity.
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
@@ -21,6 +28,11 @@ public class InternetBroadcast extends BroadcastReceiver {
         }
     }
 
+    /**
+     * Checks if network connectivity is available.
+     * @param context The application context.
+     * @return True if network connectivity is available, false otherwise.
+     */
     private boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

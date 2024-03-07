@@ -1,7 +1,6 @@
 package com.example.project;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,12 +36,14 @@ public class ShiftHystory extends AppCompatActivity {
         setContentView(R.layout.activity_shift_hystory);
         id = getIntent().getIntExtra("id", 0);
 
+        // Load animation for RecyclerView
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.frombottomtotop);
         RecyclerView recyclerView = findViewById(R.id.RecyclerViewShiftHistory);
         recyclerView.startAnimation(animation);
+
+        // Set up bottom navigation view
         BottomNavigationView tabLayout=findViewById(R.id.tabslayout);
         tabLayout.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 item.setChecked(true);
@@ -50,6 +51,8 @@ public class ShiftHystory extends AppCompatActivity {
             }
         });
         tabLayout.setSelectedItemId(R.id.HistoryItem);
+
+        // Connect to the database and fetch shift history
         Connection con = new ConnectionHelper().connectionclass();
         try {
             ResultSet result = con.createStatement().executeQuery("SELECT * FROM shifthistory WHERE WorkerId = '" + id+"'");
@@ -63,18 +66,22 @@ public class ShiftHystory extends AppCompatActivity {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd HH:mm");
                     String startString = simpleDateFormat.format(start);
                     String endString = simpleDateFormat.format(end);
-                    // Assuming id is defined elsewhere
+                    // Assuming ShiftObject is defined elsewhere
                     shiftarray.add(new ShiftObject(startString, endString, id, result.getInt("ShiftID"), start, end, ""));
                 }
             }
         } catch (Exception e) {
             Log.e("error", e.getMessage());
         }
+
+        // Set up RecyclerView adapter for shift history
         ShiftsAdapter shiftsAdapter = new ShiftsAdapter(this, shiftarray);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(shiftsAdapter);
+
+        // Set bottom navigation actions
         tabLayout.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

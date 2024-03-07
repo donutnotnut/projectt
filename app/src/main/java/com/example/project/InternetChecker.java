@@ -10,6 +10,9 @@ import android.provider.Settings;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+/**
+ * Service to display a dialog when internet connection is unavailable.
+ */
 public class InternetChecker extends Service {
 
     private AlertDialog networkDialog;
@@ -20,6 +23,9 @@ public class InternetChecker extends Service {
         return START_STICKY;
     }
 
+    /**
+     * Displays a dialog to inform the user about the unavailable network connection.
+     */
     private void showNetworkDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         builder.setTitle("Network Unavailable");

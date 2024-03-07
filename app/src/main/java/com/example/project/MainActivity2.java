@@ -47,14 +47,17 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+/**
+ * The main activity for regular users.
+ */
 public class MainActivity2 extends AppCompatActivity {
+    // Variables for managing shift information and UI elements
     private Runnable updateNotificationRunnable;
     private boolean IsShiftActive = false;
     private Timestamp startShift = null;
@@ -63,8 +66,6 @@ public class MainActivity2 extends AppCompatActivity {
     private double hours = 0;
     private double earned = 0;
     private String name = "";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,14 +229,14 @@ public class MainActivity2 extends AppCompatActivity {
             }
             @Override
             protected void onPostExecute(Object o) {
-                    WelcomeText.setText("Welcome, " + name);
-                    SalaryText.setText(Salary + "₪");
-                    EarnedText.setText(earned + "₪");
-                    HoursText.setText(hours + " hours");
-                    Log.i("hours", String.valueOf(hours));
-                    Log.i("earned", String.valueOf(earned));
-                    Log.i("salary", String.valueOf(Salary));
-                    Log.i("name", String.valueOf(name));
+                WelcomeText.setText("Welcome, " + name);
+                SalaryText.setText(Salary + "₪");
+                EarnedText.setText(earned + "₪");
+                HoursText.setText(hours + " hours");
+                Log.i("hours", String.valueOf(hours));
+                Log.i("earned", String.valueOf(earned));
+                Log.i("salary", String.valueOf(Salary));
+                Log.i("name", String.valueOf(name));
             }
         };
         asyncTask.execute();
@@ -410,6 +411,13 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
+    /**
+     * Update the notification with the elapsed time.
+     *
+     * @param remoteViews         The RemoteViews object to update
+     * @param notificationManager The NotificationManagerCompat object to manage notifications
+     * @param notifBuilder        The NotificationCompat.Builder object for building the notification
+     */
     private void updateNotification(RemoteViews remoteViews, NotificationManagerCompat notificationManager, NotificationCompat.Builder notifBuilder) {
         long elapsedTime = System.currentTimeMillis() - startShift.getTime();
         String formattedTime = formatElapsedTime(elapsedTime);
@@ -420,6 +428,13 @@ public class MainActivity2 extends AppCompatActivity {
         }
         notificationManager.notify(1, notifBuilder.build());
     }
+
+    /**
+     * Format elapsed time in milliseconds to a HH:MM:SS string.
+     *
+     * @param elapsedTime The elapsed time in milliseconds
+     * @return The formatted time string
+     */
     private String formatElapsedTime(long elapsedTime) {
         long seconds = (elapsedTime / 1000) % 60;
         long minutes = (elapsedTime / (1000 * 60)) % 60;

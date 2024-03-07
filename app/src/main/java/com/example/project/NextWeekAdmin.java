@@ -1,6 +1,5 @@
 package com.example.project;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,12 +25,20 @@ public class NextWeekAdmin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next_week_admin);
+
+        // Initialize RecyclerView and button
         RecyclerView recyclerView = findViewById(R.id.RecyclerAdminPageShiftNext);
         recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.frombottomtotop));
-        Connection connection = new ConnectionHelper().connectionclass();
         Button button = findViewById(R.id.AcceptTheChanges);
+
+        // Create an ArrayList to hold NextWeekScheduleItem objects
         ArrayList<NextWeekScheduleItem> array= new ArrayList<>();
+
+        // Establish database connection
+        Connection connection = new ConnectionHelper().connectionclass();
+
         try {
+            // Retrieve data from the NextWeek table and populate the ArrayList
             PreparedStatement getIdWithWorkdays= connection.prepareStatement("SELECT * FROM NextWeek");
             ResultSet resultSet = getIdWithWorkdays.executeQuery();
             while (resultSet.next()){
@@ -43,11 +50,15 @@ public class NextWeekAdmin extends AppCompatActivity {
         catch (Exception e) {
             Log.e("error 1",e.getMessage());
         }
+
+        // Create adapter and set it to the RecyclerView
         AdapterAdminNextWeek adapter = new AdapterAdminNextWeek(array,this);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
+
+        // Set button click listener for accepting changes
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
