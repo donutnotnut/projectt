@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.NFC"/>
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -64,6 +66,17 @@
             android:exported="false"
             android:foregroundServiceType="dataSync" />
         <service android:name=".InternetChecker"/>
+        <activity android:name=".NfcHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="com.example.project/punchin" />
+            </intent-filter>
+        </activity>
+        <service android:name=".MyNfcService"
+            android:foregroundServiceType="dataSync">
+        </service>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -25,7 +25,7 @@ public class ConnectionHelper {
      *
      * @return The established database connection.
      */
-    public Connection connectionclass() {
+    public static Connection connectionclass() {
         // Constructing the connection URL
         String connectionUrl = "jdbc:mysql://" + ip + ":" + port + "/" + database;
 

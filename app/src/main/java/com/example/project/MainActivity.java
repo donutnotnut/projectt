@@ -85,16 +85,17 @@ public class MainActivity extends AppCompatActivity {
                     // Check if the entered password is correct
                     if (result.getString("Password").equals(password.getText().toString())) {
                         int id=result.getInt("ID");
+                        //put id into shared preferences
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("id", id);
+                        editor.apply();
 
                         // Start appropriate activity based on user role (admin or regular user)
                         if (!AdminSwitch.isChecked()) {
                             Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                             intent.putExtra("id",id);
                             startActivity(intent);
-                            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt("id", id);
-                            editor.apply();
                         }
                         else{
                             Intent intent = new Intent(MainActivity.this, AdminMainPage.class);
