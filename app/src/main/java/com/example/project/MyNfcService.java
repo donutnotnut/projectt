@@ -132,6 +132,7 @@ public class MyNfcService extends Service {
                         preparedStatement.executeUpdate();
                         Log.i("inserted", "Shift data inserted successfully.");
                         start = null;
+
                     }
                 } catch (Exception e) {
                     Log.e("error while pushing", e.getMessage());

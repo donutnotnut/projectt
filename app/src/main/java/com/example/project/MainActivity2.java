@@ -307,6 +307,7 @@ public class MainActivity2 extends AppCompatActivity {
                         preparedStatement.setTimestamp(2, Timestamp.valueOf(startShift.toString()));
                         preparedStatement.setTimestamp(3, Timestamp.valueOf(endShift.toString()));
                         preparedStatement.executeUpdate();
+                        stopService(new Intent(MainActivity2.this, MyNfcService.class));
                     } catch (Exception e) {
                         Log.e("error while pushing", e.getMessage());
 
