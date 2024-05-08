@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.008"
-        app:titleTextColor="@color/accent_dark" />
+        app:titleTextColor="#00001E2C" />
 
     <TextView
         android:id="@+id/MainTextShiftHistoryAdmin"

@@ -40,6 +40,12 @@ public class ConnectionHelper {
                 if (!conn.isClosed()) {
                     return conn;
                 }
+                else {
+                    // If the connection is closed, establish a new connection
+                    conn = DriverManager.getConnection(connectionUrl, uname, pass);
+                    return conn;
+                }
+
             } catch (SQLException e) {
                 Log.e("error", e.getMessage());
             }

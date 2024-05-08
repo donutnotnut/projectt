@@ -69,7 +69,6 @@ public class SelectNextWeekShifts extends AppCompatActivity {
         save = findViewById(R.id.button);
         recyclerView = findViewById(R.id.CurrentWeekrRecycler);
         bottomNavigationView = findViewById(R.id.tabslayout);
-        Warning.startAnimation(animation);
         background.startAnimation(animation);
         Monday.startAnimation(animation);
         Tuesday.startAnimation(animation);

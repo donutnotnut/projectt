@@ -71,7 +71,7 @@
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="com.example.project/punchin" />
+                <data android:mimeType="application/vnd.shealth.le.oob" />
             </intent-filter>
         </activity>
         <service android:name=".MyNfcService"
