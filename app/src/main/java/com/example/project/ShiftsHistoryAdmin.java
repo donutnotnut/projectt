@@ -41,24 +41,26 @@ public class ShiftsHistoryAdmin extends AppCompatActivity {
             while (result.next()){
                 // Retrieve worker information associated with the shift
                 ResultSet names = connection.createStatement().executeQuery("select * from info where id = '"+result.getInt("WorkerId")+"'");
-                names.next();
+                if (names.next()) {
 
-                // Retrieve timestamps for shift start and end times
-                Timestamp start = result.getTimestamp("StartTime");
-                Timestamp end = result.getTimestamp("EndTime");
+                    // Retrieve timestamps for shift start and end times
+                    Timestamp start = result.getTimestamp("StartTime");
+                    Timestamp end = result.getTimestamp("EndTime");
 
-                // Format timestamps to string representation
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd HH:mm");
-                String startString = simpleDateFormat.format(start);
-                String endString = simpleDateFormat.format(end);
+                    // Format timestamps to string representation
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd HH:mm");
+                    String startString = simpleDateFormat.format(start);
+                    String endString = simpleDateFormat.format(end);
 
-                // Create a ShiftObject and add it to the array list
-                array.add(new ShiftObject(startString, endString, result.getInt("WorkerId"), result.getInt("ShiftID"), start, end, names.getString("Name")+ " "+names.getString("Surname")));
-            }
+                    // Create a ShiftObject and add it to the array list
+                    array.add(new ShiftObject(startString, endString, result.getInt("WorkerID"), result.getInt("ShiftID"), start, end, names.getString("Name") + " " + names.getString("Surname")));
+                    }
+                }
         }
         catch (Exception e){
             // Log any errors that occur during database operations
             Log.e("Error", e.getMessage());
+            Log.e("Erorr", String.valueOf(e.getCause()));
         }
 
         // Create and set adapter for RecyclerView

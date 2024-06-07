@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.bsh.commands.dir
+
 plugins {
     id("com.android.application")
 }
@@ -36,7 +38,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.19")
-    implementation(files("D:\\projects\\project\\app\\libs\\mysql-connector-java-5.1.49.jar"))
+    implementation ("mysql:mysql-connector-java:5.1.49")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
