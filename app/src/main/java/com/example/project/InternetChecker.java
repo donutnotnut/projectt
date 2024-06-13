@@ -2,24 +2,32 @@ package com.example.project;
 
 import android.app.AlertDialog;
 import android.app.Service;
-import android.content.DialogInterface;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-/**
- * Service to display a dialog when internet connection is unavailable.
- */
 public class InternetChecker extends Service {
 
     private AlertDialog networkDialog;
+    private boolean isInternetAvailable = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        showNetworkDialog();
+        // Get the boolean value passed from the BroadcastReceiver
+        isInternetAvailable = intent.getBooleanExtra("internetAvailable", false);
+        if (!isInternetAvailable) {
+            showNetworkDialog();
+        } else {
+            dismissNetworkDialog();
+        }
         return START_STICKY;
     }
 
@@ -35,13 +43,21 @@ public class InternetChecker extends Service {
             networkDialog = builder.create();
             networkDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
             networkDialog.show();
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), "Please allow the permission", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
+    }
 
+    /**
+     * Dismisses the network dialog.
+     */
+    private void dismissNetworkDialog() {
+        if (networkDialog != null && networkDialog.isShowing()) {
+            networkDialog.dismiss();
+        }
     }
 
     @Override
@@ -52,8 +68,6 @@ public class InternetChecker extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (networkDialog != null && networkDialog.isShowing()) {
-            networkDialog.cancel();
-        }
+        dismissNetworkDialog();
     }
 }
